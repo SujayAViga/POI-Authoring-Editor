@@ -1,0 +1,12 @@
+.inpector-container{
+    background-color: rgb(102, 102, 102);
+    width: 20em;
+}
+
+.transforms-container{
+    background-color: rgb(46, 46, 46);
+    padding: 1%;
+    margin: 3%;
+    justify-content: center;
+    text-align: center;
+}
