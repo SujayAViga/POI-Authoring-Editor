@@ -19,7 +19,7 @@ function CreatePoi({onClose,setPoiName,setPoiType}) {
             <input placeholder='Poi Name' onChange={(e)=>{setPoiName(e.target.value)}}/>
             <Form.Select size='lg' style={{width:"100%"}} onChange={(e)=>{setPoiType(e.target.value)}}>
                 <option>POI type</option>
-                <option value="1">One</option>
+                <option value="1">Point Cloud</option>
                 <option value="2">Cesium</option>
                 <option value="3">glb/Gltf</option>
                 <option value="4">Animated GLB</option>

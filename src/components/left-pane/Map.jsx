@@ -4,7 +4,7 @@ import './Map.css'
 import CreatePoi from './CreatePoi';
 
 
-const Map = ({ onAddPoi }) => {
+const Map = ({ onAddPoi,mapName }) => {
     const [pois, setPois] = useState([]);
     const [isCreatePoiModalOpen, setCreatePoiModalOpen] = useState(false);
     const [poiName, setPoiName] = useState('')
@@ -12,7 +12,7 @@ const Map = ({ onAddPoi }) => {
 
 
     const handleAddPoi = () => {
-      setPois((prevMaps) => [...prevMaps, <Poi key={prevMaps.length} />]);
+      setPois((prevMaps) => [...prevMaps, <Poi poiName={poiName} poiType={poiType} key={prevMaps.length} />]);
     };
 
     const handleOpenCreatePoiModal = () => {
@@ -21,15 +21,16 @@ const Map = ({ onAddPoi }) => {
 
     const handleCloseCreatePoiModal = () => {
       setCreatePoiModalOpen(false);
+      handleAddPoi()
       console.log(poiName);
       console.log(poiType);
     };
     
       return (
         <div className='map-container'>
-          <p>Map Component</p>
-          <button onClick={handleOpenCreatePoiModal}>Add POI</button>
-          {/* <button onClick={handleOpenCreatePoiModal}>Open Create POI Modal</button> */}
+          <p>{mapName}</p>
+          <button onClick={handleOpenCreatePoiModal}>Create POI</button>
+         
 
           {/* Render the CreatePoi modal if it's open */}
           {isCreatePoiModalOpen &&

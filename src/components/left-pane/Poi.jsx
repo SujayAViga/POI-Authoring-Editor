@@ -1,9 +1,10 @@
 import React from 'react'
 
-const Poi = ({ poiId }) => {
+const Poi = ({ poiName,poiType }) => {
+  
     return (
       <div>
-        <p>Point of Interest (POI) {poiId}</p>
+        <p>{poiName}({poiType})</p>
       </div>
     );
   };
