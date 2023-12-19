@@ -8,6 +8,7 @@ function CreateMap({onClose,setMapName}) {
     const handleAddPoi = () => {
         onClose(); // Close the modal
     };
+    
 
     return (
         <div className="modal-overlay">

@@ -21,7 +21,16 @@ const Map = ({ onAddPoi,mapName }) => {
 
     const handleCloseCreatePoiModal = () => {
       setCreatePoiModalOpen(false);
-      handleAddPoi()
+      if(poiName!=='' && poiType!==null){
+        handleAddPoi()
+        setPoiName('')
+        setPoiType(null)
+      }else{
+        alert('Enter Poi Name and Type')
+        setPoiName('')
+        setPoiType(null)
+      }
+      
       console.log(poiName);
       console.log(poiType);
     };

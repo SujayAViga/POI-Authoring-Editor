@@ -22,7 +22,13 @@ function Hierarchy() {
 
   const handleCloseCreateMapModal = () => {
     setCreateMapModalOpen(false);
-    handleAddMap()
+    if(mapName!==""){
+      handleAddMap()
+      setMapName('')
+    }else{
+      alert("Enter a Map name")
+    }
+    
   };
   
 
