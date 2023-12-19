@@ -1,12 +1,14 @@
 .inpector-container{
     background-color: rgb(102, 102, 102);
     width: 20em;
+    overflow-y: scroll;
 }
 
-.transforms-container{
+.property-container{
     background-color: rgb(46, 46, 46);
-    padding: 1%;
+    padding: 2%;
     margin: 3%;
     justify-content: center;
     text-align: center;
+    border-radius: 10px;
 }

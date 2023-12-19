@@ -5,7 +5,7 @@ import Scale from './Scale'
 
 function Transforms() {
   return (
-    <div className='transforms-container'>
+    <div className='property-container'>
         Transforms
         <Position/>
         <Rotation/>

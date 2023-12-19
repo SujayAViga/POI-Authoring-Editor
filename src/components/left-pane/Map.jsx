@@ -37,7 +37,7 @@ const Map = ({ onAddPoi,mapName }) => {
     
       return (
         <div className='map-container'>
-          <p>{mapName}</p>
+          <h3>{mapName}</h3>
           <button onClick={handleOpenCreatePoiModal}>Create POI</button>
          
 
