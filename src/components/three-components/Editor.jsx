@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { Canvas } from '@react-three/fiber'
-import { CameraControls, OrbitControls, PivotControls, TransformControls } from '@react-three/drei'
+import { CameraControls, OrbitControls, PivotControls, Splat, TransformControls } from '@react-three/drei'
 import Ground from './Ground';
 import './Editor.css'
 
-function Editor() {
+function Editor(props) {
+
     const [isCtrlPressed, setIsCtrlPressed] = useState(false);
     const handleKeyDown = (event) => {
         if (event.key === 'Control') {
@@ -30,6 +31,10 @@ function Editor() {
                 </mesh>
             </PivotControls>
             <Ground/>
+            <PivotControls >
+              <Splat src={props.splatUrl} />
+              {/* https://huggingface.co/cakewalk/splat-data/resolve/main/garden.splat */}
+            </PivotControls>
         </Canvas>
     </>
   )

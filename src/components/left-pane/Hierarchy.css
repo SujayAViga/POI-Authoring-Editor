@@ -8,6 +8,15 @@
     
 }
 
+.user-container{
+  background-color: rgb(46, 46, 46);
+  padding: 2%;
+  margin: 3%;
+  justify-content: center;
+  text-align: center;
+  border-radius: 10px;
+}
+
 .gameobject-container{
     height: 80%;
     width: 105%;

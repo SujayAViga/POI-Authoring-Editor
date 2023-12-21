@@ -1,9 +1,12 @@
 import React from 'react'
 import { Form } from 'react-bootstrap'
+import Transforms from '../Transforms'
 
 function TextProp() {
   return (
-    <div className='property-container'>
+    <>
+      <Transforms/>
+      <div className='property-container'>
         <h4>Text Prop</h4>
           {/* <textarea value={this.state.value} onChange={this.handleChange} /> */}
           <textarea placeholder='Text' style={{width:"95%", height:"10em",padding:"1%", margin:'1%',fontSize:16}} />
@@ -21,6 +24,7 @@ function TextProp() {
             ))}
           </Form.Select>
       </div>
+    </>
   )
 }
 

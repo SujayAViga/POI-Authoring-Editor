@@ -1,10 +1,11 @@
 import React from 'react'
+import './Hierarchy.css'
 
 function UserDetails() {
   return (
-    <div style={{width:'15em',backgroundColor:'#353b48'}}>
-        <p>Name : Sujay</p>
-        <p>Id : 1</p>
+    <div className='user-container'>
+        <h4>Name : Sujay</h4>
+        <h4>Id : 1</h4>
     </div>
   )
 }

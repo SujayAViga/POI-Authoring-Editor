@@ -1,14 +1,26 @@
-import React from 'react'
+import React, { useState } from 'react'
+import Transforms from '../Transforms'
+import { Button } from 'react-bootstrap'
 
-function SplatProp() {
+function SplatProp({setSplatUrl}) {
+  const [splatLocalUrl, setSplatLocalUrl] = useState('')
+  const handleSplatFetch = () =>{
+    setSplatUrl(splatLocalUrl)
+  }
+
+
   return (
-    <div className='property-container'>
+    <>
+      <Transforms/>
+      <div className='property-container'>
         <h4>Splat Property</h4>
         <input placeholder='locale'/>
-        <input placeholder='Splat url'/>
+        <input placeholder='Splat url' onChange={(e)=>{setSplatLocalUrl(e.target.value)}}/>
         <input placeholder='Exit portal'/>
         <input placeholder='Entry portal'/>
-    </div>
+        <Button onClick={handleSplatFetch}>Fetch</Button>
+      </div>
+    </>
   )
 }
 

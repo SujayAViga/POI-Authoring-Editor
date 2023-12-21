@@ -27,7 +27,7 @@ const Poi = ({ poiName,poiType }) => {
   }
     return (
       <div className='property-container'>        
-        <Link to={`/home/${poiRoute[poiType]}`}><p>{poiName}({poitype[poiType]})</p></Link>
+        <Link to={`/${poiRoute[poiType]}`}><p>{poiName}({poitype[poiType]})</p></Link>
       </div>
     );
   };
