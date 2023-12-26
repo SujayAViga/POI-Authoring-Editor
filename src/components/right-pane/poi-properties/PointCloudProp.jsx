@@ -7,7 +7,7 @@ function PointCloudProp() {
       <Transforms/>
       <div className='property-container'>
         <h4>Point Cloud Prop</h4>
-      
+        
       </div>
     </>
   )

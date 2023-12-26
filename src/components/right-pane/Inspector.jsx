@@ -1,7 +1,6 @@
 import React from 'react'
 import './Inspector.css'
 
-import Transforms from './Transforms'
 import SplatProp from './poi-properties/SplatProp'
 import VideosProp from './poi-properties/VideosProp'
 import CesiumProp from './poi-properties/CesiumProp'
@@ -15,6 +14,7 @@ import { Route, Routes } from 'react-router-dom';
 
 
 function Inspector({setSplatUrl}) {
+  const objectIds = [1, 2, 3];
   return (
     <div className='inpector-container'>
         <Routes>
@@ -22,7 +22,9 @@ function Inspector({setSplatUrl}) {
           <Route path="/Audio" element={<AudioProp />} />
           <Route path="/Cesium" element={<CesiumProp />} />
           <Route path="/Image" element={<ImageProp />} />
-          <Route path="/Splat" element={<SplatProp setSplatUrl={setSplatUrl}/>} />
+          {objectIds.map((objectId) => (
+          <Route key={objectId} path={`/Object${objectId}/Splat`} element={<SplatProp objectId={objectId} setSplatUrl={setSplatUrl}/>} />
+          ))}
           <Route path="/Video" element={<VideosProp />} />
           <Route path="/Text" element={<TextProp />} />
           <Route path="/GLB" element={<StaticGlbProp />} />

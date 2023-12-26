@@ -1,8 +1,7 @@
 import React from 'react'
-import { NavLink } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-const Poi = ({ poiName,poiType }) => {
+const Poi = ({ poiName,poiType,objectId }) => {
   const poitype = {
     "1": "VV",
     "2": "Cesium",
@@ -27,7 +26,7 @@ const Poi = ({ poiName,poiType }) => {
   }
     return (
       <div className='property-container'>        
-        <Link to={`/${poiRoute[poiType]}`}><p>{poiName}({poitype[poiType]})</p></Link>
+        <Link to={`object${objectId}/${poiRoute[poiType]}`}><p>{poiName}({poitype[poiType]})</p></Link>
       </div>
     );
   };

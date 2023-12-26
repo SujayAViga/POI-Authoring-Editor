@@ -2,10 +2,12 @@ import React, { useState } from 'react'
 import Transforms from '../Transforms'
 import { Button } from 'react-bootstrap'
 
-function SplatProp({setSplatUrl}) {
+function SplatProp({setSplatUrl,objectId}) {
   const [splatLocalUrl, setSplatLocalUrl] = useState('')
+  const [objectKey, setObjectKey] = useState()
   const handleSplatFetch = () =>{
-    setSplatUrl(splatLocalUrl)
+    setSplatUrl(splatLocalUrl);
+    setObjectKey(objectId);
   }
 
 
@@ -25,3 +27,5 @@ function SplatProp({setSplatUrl}) {
 }
 
 export default SplatProp
+
+

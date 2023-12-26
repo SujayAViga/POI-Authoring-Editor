@@ -17,7 +17,7 @@ function TextProp() {
             ))}
           </Form.Select>
 
-          <Form.Select style={{ width: "95%", height: "2em", padding: "1%", margin: '1%', fontSize: 16, fontFamily: '' }}>
+          <Form.Select style={{ width: "95%", height: "2em", padding: "1%", margin: '1%', fontSize: 16 }}>
             <option>Font size</option>
             {[12, 14, 16, 18, 20].map((size) => (
               <option key={size} value={size}>{size}</option>

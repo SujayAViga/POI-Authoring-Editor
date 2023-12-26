@@ -2,12 +2,27 @@
 import React, { useState } from 'react';
 import './CreatePoi.css';
 import Form from 'react-bootstrap/Form';
-import FormSelect from 'react-bootstrap/FormSelect'
+import { Splat } from '@react-three/drei';
+import { useGameObjects } from '../three-components/GameObjectsProvider';
 
 function CreatePoi({onClose,setPoiName,setPoiType}) {
+    const [poiTypeLocal, setPoiTypeLocal] = useState(null)
+
     const handleAddPoi = () => {
+        createGameobject()
+
         onClose(); // Close the modal
     };
+    const { gameObjects, setGameObjects } = useGameObjects(0);
+    let newGameObject;
+    const createGameobject = () =>{
+        if(poiTypeLocal==='9'){
+            newGameObject = <Splat src="https://huggingface.co/cakewalk/splat-data/resolve/main/garden.splat" key={gameObjects.length + 1} />; // You can use a key to ensure uniqueness
+        }
+
+        // Update the gameObjects array with the newSplat
+        setGameObjects((prevGameObjects) => [...prevGameObjects, newGameObject]);
+    }
 
     return (
         <div className="modal-overlay">
@@ -17,7 +32,7 @@ function CreatePoi({onClose,setPoiName,setPoiType}) {
             </span>
             <h2 style={{color:'black'}}>Create POI</h2>
             <input placeholder='Poi Name' onChange={(e)=>{setPoiName(e.target.value)}}/>
-            <Form.Select size='lg' style={{width:"100%"}} onChange={(e)=>{setPoiType(e.target.value)}}>
+            <Form.Select size='lg' style={{ width: "100%", height: "2em", padding: "1%", margin: '1%', fontSize: 16,borderRadius:5 }} onChange={(e)=>{setPoiType(e.target.value); setPoiTypeLocal(e.target.value)}}>
                 <option>POI type</option>
                 <option value="1">Point Cloud</option>
                 <option value="2">Cesium</option>

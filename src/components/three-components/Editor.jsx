@@ -3,9 +3,11 @@ import { Canvas } from '@react-three/fiber'
 import { CameraControls, OrbitControls, PivotControls, Splat, TransformControls } from '@react-three/drei'
 import Ground from './Ground';
 import './Editor.css'
+import { useGameObjects } from './GameObjectsProvider';
 
-function Editor(props) {
-
+function Editor() {
+    
+    const { gameObjects, setGameObjects } = useGameObjects();
     const [isCtrlPressed, setIsCtrlPressed] = useState(false);
     const handleKeyDown = (event) => {
         if (event.key === 'Control') {
@@ -25,16 +27,14 @@ function Editor(props) {
     <>
         <Canvas>
             <CameraControls enabled ={isCtrlPressed}/>
-            <PivotControls>
-                <mesh>
-                    <boxGeometry args={[1,1,1]}/>
-                </mesh>
-            </PivotControls>
-            <Ground/>
-            <PivotControls >
-              <Splat src={props.splatUrl} />
+            <Ground />
+            {/* <PivotControls > */}
+              {/* <Splat src={props.splatUrl} /> */}
+              {gameObjects.map((object, index) => (
+                <PivotControls key={index}>{object}</PivotControls>
+              ))}
               {/* https://huggingface.co/cakewalk/splat-data/resolve/main/garden.splat */}
-            </PivotControls>
+            {/* </PivotControls> */}
         </Canvas>
     </>
   )
