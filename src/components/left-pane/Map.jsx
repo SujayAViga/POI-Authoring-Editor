@@ -40,7 +40,6 @@ const Map = ({ onAddPoi,mapName }) => {
           <h3>{mapName}</h3>
           <button onClick={handleOpenCreatePoiModal}>Create POI</button>
          
-
           {/* Render the CreatePoi modal if it's open */}
           {isCreatePoiModalOpen &&
            <CreatePoi 

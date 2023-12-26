@@ -28,13 +28,11 @@ function Editor() {
         <Canvas>
             <CameraControls enabled ={isCtrlPressed}/>
             <Ground />
-            {/* <PivotControls > */}
-              {/* <Splat src={props.splatUrl} /> */}
+
               {gameObjects.map((object, index) => (
                 <PivotControls key={index}>{object}</PivotControls>
               ))}
               {/* https://huggingface.co/cakewalk/splat-data/resolve/main/garden.splat */}
-            {/* </PivotControls> */}
         </Canvas>
     </>
   )

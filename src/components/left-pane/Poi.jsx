@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 
-const Poi = ({ poiName,poiType,objectId }) => {
+const Poi = ({ poiName,poiType }) => {
   const poitype = {
     "1": "VV",
     "2": "Cesium",
@@ -25,8 +25,8 @@ const Poi = ({ poiName,poiType,objectId }) => {
     "9": "Splat"
   }
     return (
-      <div className='property-container'>        
-        <Link to={`object${objectId}/${poiRoute[poiType]}`}><p>{poiName}({poitype[poiType]})</p></Link>
+      <div className='property-container'>
+        <Link to={`/${poiRoute[poiType]}`}><p>{poiName}({poitype[poiType]})</p></Link>
       </div>
     );
   };

@@ -4,23 +4,28 @@ import './CreatePoi.css';
 import Form from 'react-bootstrap/Form';
 import { Splat } from '@react-three/drei';
 import { useGameObjects } from '../three-components/GameObjectsProvider';
+import { useProperties } from '../three-components/PropertiesProvider';
+import SplatProp from '../right-pane/poi-properties/SplatProp';
 
 function CreatePoi({onClose,setPoiName,setPoiType}) {
     const [poiTypeLocal, setPoiTypeLocal] = useState(null)
+    const { gameObjects, setGameObjects } = useGameObjects(0);
+    const {properties, setProperties} = useProperties(0)
 
     const handleAddPoi = () => {
         createGameobject()
-
         onClose(); // Close the modal
     };
-    const { gameObjects, setGameObjects } = useGameObjects(0);
-    let newGameObject;
+   
+
+    let newGameObject,newProperty;
     const createGameobject = () =>{
         if(poiTypeLocal==='9'){
             newGameObject = <Splat src="https://huggingface.co/cakewalk/splat-data/resolve/main/garden.splat" key={gameObjects.length + 1} />; // You can use a key to ensure uniqueness
+            newProperty = <SplatProp key={gameObjects.length+1} />
         }
-
         // Update the gameObjects array with the newSplat
+        setProperties((prevProperties)=>[...prevProperties],newProperty)
         setGameObjects((prevGameObjects) => [...prevGameObjects, newGameObject]);
     }
 
