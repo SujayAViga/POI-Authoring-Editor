@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import './Inspector.css'
 import SplatProp from './poi-properties/SplatProp'
 import VideosProp from './poi-properties/VideosProp'
@@ -9,50 +9,116 @@ import PointCloudProp from './poi-properties/PointCloudProp'
 import AnimatedGltfProp from './poi-properties/AnimatedGltfProp'
 import AudioProp from './poi-properties/AudioProp'
 import ImageProp from './poi-properties/ImageProp'
-import { Route, Routes } from 'react-router-dom';
-import { useProperties } from '../three-components/PropertiesProvider'
+import { SelectedObjectContext } from '../three-components/SelectedObjectProvider'
+import axios from 'axios'
 
 
 
-function Inspector ({ selectedObject }) {
+function Inspector () {
+  const [type, setType] = useState()
+  const [Name, setName] = useState()
+  const [lang, setLang] = useState()
+
+  const { selectedObject, authToken,setAuthToken,api } = useContext(SelectedObjectContext);
+  
+
+
+  const handleLogin = async () => {
+    try {
+      // Check if authToken is already set
+      if (!authToken) {
+        const response = await api.post(
+          'user/login/',
+          {
+            email: "sujay.amberkar@vigaet.com",
+            password: 'sujay1234',
+          }
+        );
+
+        setAuthToken(response.data.accessToken);
+        // Handle the response here
+        console.log('Login successful');
+      }
+    } catch (error) {
+      // Handle errors here
+      console.error('Login failed:', error.message);
+    }
+  };
+  
+
+  useEffect(()=>{
+    handleLogin();
+    if(selectedObject){
+      setName(selectedObject.poiName)
+      setType(selectedObject.poiType)
+      setLang(selectedObject.locale)
+    }
+   
+  })
+  
   if (!selectedObject) {
     return <div>Select a game object to view properties.</div>;
   }
 
-  const { type, name } = selectedObject;
-
   switch (type) {
-    case 'splat':
-      return <SplatProp key={name} objectId={name} />;
-    // Add more cases for other game object types
-    // Example: case 'cube': return <CubeProp key={name} objectId={name} />;
-    default:
-      return <div>No properties available for this object type.</div>;
+    case '1':
+      return (        
+      <div className='inpector-container'>
+        <PointCloudProp key={Name} objectId={Name} />
+      </div>)
+    
+    case '2':
+      return (        
+      <div className='inpector-container'>
+        <CesiumProp key={Name} objectId={Name} />
+      </div>)
+    
+    case '3':
+      return (        
+      <div className='inpector-container'>
+        <StaticGlbProp key={Name} objectId={Name} />
+      </div>)
+    
+    case '4':
+      return (        
+      <div className='inpector-container'>
+        <AnimatedGltfProp key={Name} objectId={Name} />
+      </div>)
+
+    case '5':
+      return (        
+      <div className='inpector-container'>
+        <ImageProp key={Name} objectId={Name} />
+      </div>)
+
+    case '6':
+      return (        
+      <div className='inpector-container'>
+        <VideosProp key={Name} objectId={Name} />
+      </div>)
+
+    case '7':
+      return (        
+      <div className='inpector-container'>
+        <TextProp key={Name} objectId={Name} />
+      </div>)
+
+    case '8':
+      return (        
+      <div className='inpector-container'>
+        <AudioProp key={Name} objectId={Name} />
+      </div>)
+
+    case '9':
+      return (        
+      <div className='inpector-container'>
+        <SplatProp key={Name} objectId={Name} />
+      </div>)
+      
+      default:
+        return (
+          <div>select </div>)
   }
 };
 
 export default Inspector;
-
-
-
-// function Inspector({setSplatUrl}) {
-//   const {properties, setProperties} = useProperties(0)
-//   return (
-//     <div className='inpector-container'>
-//         <Routes>
-//           <Route path="/AnimatedGLB" element={<AnimatedGltfProp />} />
-//           <Route path="/Audio" element={<AudioProp />} />
-//           <Route path="/Cesium" element={<CesiumProp />} />
-//           <Route path="/Image" element={<ImageProp />} />
-//           <Route path={`/Splat`} element={properties.map((object,index)=>{object})}/>
-//           {/* <Route path={`/Splat`} element={<SplatProp setSplatUrl={setSplatUrl}/>} /> */}
-//           <Route path="/Video" element={<VideosProp />} />
-//           <Route path="/Text" element={<TextProp />} />
-//           <Route path="/GLB" element={<StaticGlbProp />} />
-//           <Route path="/VV" element={<PointCloudProp />} /> 
-//         </Routes>
-//     </div>
-//   )
-// }
-
-// export default Inspector

@@ -1,29 +1,64 @@
 // CreatePoi.js
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import './CreatePoi.css';
 import Form from 'react-bootstrap/Form';
 import { Splat } from '@react-three/drei';
 import { useGameObjects } from '../three-components/GameObjectsProvider';
 import { useProperties } from '../three-components/PropertiesProvider';
 import SplatProp from '../right-pane/poi-properties/SplatProp';
+import { SelectedObjectContext } from '../three-components/SelectedObjectProvider';
+import { createNewProperties } from './propertiesUtils';
+
 
 function CreatePoi({onClose,setPoiName,setPoiType}) {
+    const {setObjectId,api,authToken,splatUrls} = useContext(SelectedObjectContext)
     const [poiTypeLocal, setPoiTypeLocal] = useState(null)
-    const { gameObjects, setGameObjects } = useGameObjects(0);
-    const {properties, setProperties} = useProperties(0)
+
+
+    const {gameObjects,setGameObjects} = useGameObjects(0)
+    // get ref to global array that stores all game object properties
+    const {properties, setProperties} = useProperties()
+    // add new properties of game objects to the array
+    const handleAddProperties = () => {
+      const newProperties = createNewProperties(poiTypeLocal,properties)
+      setProperties((prevInstances) => [...prevInstances, newProperties]);
+  };
 
     const handleAddPoi = () => {
         createGameobject()
+        handleAddProperties()
         onClose(); // Close the modal
     };
-   
+
+    const addDataToPoi = async () => {
+        try {
+          const response = await api.post(
+            'poi/',
+            updatedPoiData,
+            {
+              headers: {
+                Authorization: `Bearer ${authToken}`,
+                'Content-Type': 'application/json', // Add this line
+              },
+            }
+          );
+          console.log("Posted poi data successfully", response.status);
+        } catch (error) {
+          console.error('Failed to post data to /poi/', error.message);
+        }
+      };
+
+      
+    //   https://huggingface.co/cakewalk/splat-data/resolve/main/garden.splat
 
     let newGameObject,newProperty;
     const createGameobject = () =>{
         if(poiTypeLocal==='9'){
-            newGameObject = <Splat src="https://huggingface.co/cakewalk/splat-data/resolve/main/garden.splat" key={gameObjects.length + 1} />; // You can use a key to ensure uniqueness
-            newProperty = <SplatProp key={gameObjects.length+1} />
+            setObjectId(gameObjects.length+1)
+            newGameObject = <Splat src={splatUrls} key={gameObjects.length + 1} objectId={gameObjects.length + 1}/>; // You can use a key to ensure uniqueness
+            newProperty = <SplatProp key={gameObjects.length+1} objectId={gameObjects.length+1}/>
         }
+        
         // Update the gameObjects array with the newSplat
         setProperties((prevProperties)=>[...prevProperties],newProperty)
         setGameObjects((prevGameObjects) => [...prevGameObjects, newGameObject]);

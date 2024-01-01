@@ -1,10 +1,12 @@
-import React,{useState} from 'react'
+import React,{useContext, useState} from 'react'
 import Poi from './Poi';
 import './Map.css'
 import CreatePoi from './CreatePoi';
+import { SelectedObjectContext } from '../three-components/SelectedObjectProvider';
 
 
 const Map = ({ onAddPoi,mapName }) => {
+    const {objectId,locale} = useContext(SelectedObjectContext)
     const [pois, setPois] = useState([]);
     const [isCreatePoiModalOpen, setCreatePoiModalOpen] = useState(false);
     const [poiName, setPoiName] = useState('')
@@ -12,7 +14,7 @@ const Map = ({ onAddPoi,mapName }) => {
 
 
     const handleAddPoi = () => {
-      setPois((prevMaps) => [...prevMaps, <Poi poiName={poiName} poiType={poiType} key={prevMaps.length} />]);
+      setPois((prevMaps) => [...prevMaps, <Poi locale={locale} objectId={objectId} poiName={poiName} poiType={poiType} key={prevMaps.length} />]);
     };
 
     const handleOpenCreatePoiModal = () => {

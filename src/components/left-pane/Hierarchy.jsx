@@ -1,11 +1,13 @@
-import React,{useState} from 'react'
+import React,{useContext, useState} from 'react'
 import UserDetails from './UserDetails'
 import Map from './Map';
 import './Hierarchy.css'
 import CreateMap from './CreateMap';
+import { SelectedObjectContext } from '../three-components/SelectedObjectProvider';
 
 
 function Hierarchy() {
+  const { setSelectedObject } = useContext(SelectedObjectContext);
   const [maps, setMaps] = useState([]);
 
   const [isCreateMapModalOpen, setCreateMapModalOpen] = useState(false);
