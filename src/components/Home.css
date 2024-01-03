@@ -7,8 +7,6 @@
   padding: 0;
 }
 
-
-
 .Hierarchy {
   flex: 3; /* Components other than Editor share remaining space equally */
   width: 300px; /* Adjust the width as needed */

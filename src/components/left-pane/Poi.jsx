@@ -1,7 +1,21 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import { Link } from 'react-router-dom';
+import { SelectedObjectContext } from '../three-components/SelectedObjectProvider';
+import { useGameObjects } from '../three-components/GameObjectsProvider';
+import { useProperties } from '../three-components/PropertiesProvider';
 
-const Poi = ({ poiName,poiType,objectId }) => {
+const Poi = ({ poiName,poiType,objectId,locale }) => {
+  const { setSelectedObject,setObjectId } = useContext(SelectedObjectContext);
+  const {properties} = useProperties()
+  const {gameObjects} = useGameObjects()
+
+
+
+  const handleObjectSelection = () => {
+    setSelectedObject({poiType,poiName,locale});
+    setObjectId(objectId)
+  };
+
   const poitype = {
     "1": "VV",
     "2": "Cesium",
@@ -13,20 +27,9 @@ const Poi = ({ poiName,poiType,objectId }) => {
     "8": "Audio",
     "9": "Splat"
   }
-  const poiRoute = {
-    "1": "VV",
-    "2": "Cesium",
-    "3": "GLB",
-    "4": "AnimatedGLB",
-    "5": "Image",
-    "6": "Video",
-    "7": "Text",
-    "8": "Audio",
-    "9": "Splat"
-  }
     return (
-      <div className='property-container'>        
-        <Link to={`object${objectId}/${poiRoute[poiType]}`}><p>{poiName}({poitype[poiType]})</p></Link>
+      <div className='property-container'>
+        <button onClick={handleObjectSelection}>{poiName}({poitype[poiType]})</button>
       </div>
     );
   };
