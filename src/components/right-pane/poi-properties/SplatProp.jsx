@@ -14,25 +14,20 @@ function SplatProp({url}) {
 
   useEffect(()=>{
     setSplatLocalUrl(properties[objectId].url)
-    // console.log("splatProp",objectId,properties);
   },[properties])
 
   const handleSplatFetch = () =>{
     fetchDataFromPoi()
-    // setSplatLocalUrl(splatLocalUrl)
   }
   const handleSplatUpdate = () =>{
     // updatePoiData()
     // fetchDataFromPoi()
     const updatedProperties = [...properties];
       
-      // Update the 5th element (index 4) with a new value
-      updatedProperties[objectId].url = splatLocalUrl;
-      console.log("e",updatedProperties[objectId]);
-
-      // Call setProperties to update the state with the modified array
-      setProperties(updatedProperties);
-
+    // Update the 5th element (index 4) with a new value
+    updatedProperties[objectId].url = splatLocalUrl;
+    // Call setProperties to update the state with the modified array
+    setProperties(updatedProperties);
   }
 
   const updatedPoiData = {

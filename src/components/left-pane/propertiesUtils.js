@@ -3,12 +3,12 @@ export const createNewProperties = (poiTypeLocal, properties) => {
     const baseProperties = {
       id: properties.length,
       location: {
-        x: 1,
+        x: 0,
         y: 0,
         z: 0,
       },
       rotation:{
-        x: 1,
+        x: 0,
         y: 0,
         z: 0,
       },

@@ -64,6 +64,7 @@ function Inspector () {
     case '1':
       return (        
       <div className='inpector-container'>
+        <div>{selectedObject.poiName}</div>
         <PointCloudProp key={Name} objectId={Name} />
       </div>)
     
@@ -112,12 +113,13 @@ function Inspector () {
     case '9':
       return (        
       <div className='inpector-container'>
+        <div className='property-container'>{selectedObject.poiName}</div>
         <SplatProp key={Name} objectId={Name} />
       </div>)
       
       default:
         return (
-          <div>select </div>)
+          <div className='property-container'>select</div>)
   }
 };
 

@@ -5,7 +5,8 @@ const PropertiesContext = createContext()
 
 export const PropertiesProvider = ({children})=>{
     const [properties, setProperties] = useState([])
-    const value = {properties, setProperties};
+    const [testString, setTestString] = useState('testString')
+    const value = {properties, setProperties,testString, setTestString};
 
     return(
         <PropertiesContext.Provider value = {value}>

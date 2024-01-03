@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
-import { CameraControls, OrbitControls, PivotControls, Splat, TransformControls } from '@react-three/drei'
+import { CameraControls, PivotControls } from '@react-three/drei'
 import Ground from './Ground';
 import './Editor.css'
 import { useGameObjects } from './GameObjectsProvider';
@@ -9,8 +9,9 @@ import { useProperties } from './PropertiesProvider';
 
 function Editor() {
 
+
     const { gameObjects, setGameObjects } = useGameObjects();
-    const {properties} = useProperties()
+    const {properties,setProperties,testString,setTestString} = useProperties()
     const {objectId} = useContext(SelectedObjectContext)
 
     const [isCtrlPressed, setIsCtrlPressed] = useState(false);
@@ -25,6 +26,18 @@ function Editor() {
           setIsCtrlPressed(false);
         }
       };
+
+      const handleDrag = (e) =>{          
+          const updatedProperties = [...properties];
+          console.log(e.elements);
+          updatedProperties[objectId].location.x = e.elements[12]
+          updatedProperties[objectId].location.y = e.elements[13]
+          updatedProperties[objectId].location.z = e.elements[14]
+
+          // Call setProperties to update the state with the modified array
+          setProperties(updatedProperties);
+
+      }
   
       window.addEventListener('keydown', handleKeyDown);
       window.addEventListener('keyup', handleKeyUp);
@@ -39,10 +52,11 @@ function Editor() {
           if(assetType=="splat"){
               prop.src = combinedProps.url;
           }      
+          // console.log();
           // Create a new component with merged props
           const combinedComponent = React.cloneElement(gameObject, prop);
-      
-          return <PivotControls key={index}>{combinedComponent}</PivotControls>;
+          return <PivotControls visible={objectId===index} onDrag={(e)=>{handleDrag(e)}}
+          key={index}>{combinedComponent}</PivotControls>;
         });
 
   return (

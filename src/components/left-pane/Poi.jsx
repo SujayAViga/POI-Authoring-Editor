@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link } from 'react-router-dom';
 import { SelectedObjectContext } from '../three-components/SelectedObjectProvider';
 import { useGameObjects } from '../three-components/GameObjectsProvider';
@@ -8,12 +8,14 @@ const Poi = ({ poiName,poiType,objectId,locale }) => {
   const { setSelectedObject,setObjectId } = useContext(SelectedObjectContext);
   const {properties} = useProperties()
   const {gameObjects} = useGameObjects()
+
+
+
   const handleObjectSelection = () => {
     setSelectedObject({poiType,poiName,locale});
     setObjectId(objectId)
-    console.log("poi ",objectId);
-    // console.log(properties);
   };
+
   const poitype = {
     "1": "VV",
     "2": "Cesium",

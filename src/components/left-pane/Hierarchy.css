@@ -1,8 +1,7 @@
 .hierarchy-container{
-    background-color: rgb(102, 102, 102);
+    background-color: rgb(145, 145, 145);
     text-align: left;
     padding: 1em;
-    
     width: 25em;
     /* position: static; */
     
@@ -19,12 +18,12 @@
 
 .gameobject-container{
     height: 80%;
-    width: 105%;
-    overflow-y: scroll;
+    width: 100%;
+    /* overflow-y: scroll; */
 }
 
 .save-button {
-    /* position: relative; */
+
     width: 15em;
     transform: translateX(-0%);
   }
