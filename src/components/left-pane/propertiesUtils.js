@@ -1,9 +1,19 @@
 
 export const createNewProperties = (poiTypeLocal, properties) => {
     const baseProperties = {
-      id: properties.length + 1,
+      id: properties.length,
       location: {
-        x: 0,
+        x: 1,
+        y: 0,
+        z: 0,
+      },
+      rotation:{
+        x: 1,
+        y: 0,
+        z: 0,
+      },
+      scale:{
+        x: 1,
         y: 0,
         z: 0,
       },
@@ -83,7 +93,7 @@ export const createNewProperties = (poiTypeLocal, properties) => {
       
       additionalProperties = {
         type:"splat",
-        url: 'https://huggingface.co/cakewalk/splat-data/resolve/main/garden.splat',
+        url: '',
       };
     } 
     

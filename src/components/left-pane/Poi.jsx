@@ -5,13 +5,14 @@ import { useGameObjects } from '../three-components/GameObjectsProvider';
 import { useProperties } from '../three-components/PropertiesProvider';
 
 const Poi = ({ poiName,poiType,objectId,locale }) => {
-  const { setSelectedObject } = useContext(SelectedObjectContext);
+  const { setSelectedObject,setObjectId } = useContext(SelectedObjectContext);
   const {properties} = useProperties()
   const {gameObjects} = useGameObjects()
   const handleObjectSelection = () => {
-    setSelectedObject({poiType,poiName,objectId,locale});
-    console.log(gameObjects);
-    console.log(properties);
+    setSelectedObject({poiType,poiName,locale});
+    setObjectId(objectId)
+    console.log("poi ",objectId);
+    // console.log(properties);
   };
   const poitype = {
     "1": "VV",

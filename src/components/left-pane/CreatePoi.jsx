@@ -49,14 +49,14 @@ function CreatePoi({onClose,setPoiName,setPoiType}) {
       };
 
       
-    //   https://huggingface.co/cakewalk/splat-data/resolve/main/garden.splat
+    //   https://huggingface.co/cakewalk/splat-data/resolve/main/nike.splat
 
     let newGameObject,newProperty;
     const createGameobject = () =>{
         if(poiTypeLocal==='9'){
-            setObjectId(gameObjects.length+1)
-            newGameObject = <Splat src={splatUrls} key={gameObjects.length + 1} objectId={gameObjects.length + 1}/>; // You can use a key to ensure uniqueness
-            newProperty = <SplatProp key={gameObjects.length+1} objectId={gameObjects.length+1}/>
+            setObjectId(gameObjects.length)
+            newGameObject = <Splat src={splatUrls} key={gameObjects.length} objectId={gameObjects.length}/>; // You can use a key to ensure uniqueness
+            newProperty = <SplatProp url={splatUrls} key={gameObjects.length} objectId={gameObjects.length}/>
         }
         
         // Update the gameObjects array with the newSplat

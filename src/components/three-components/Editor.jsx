@@ -11,11 +11,7 @@ function Editor() {
 
     const { gameObjects, setGameObjects } = useGameObjects();
     const {properties} = useProperties()
-
-    useEffect(()=>{
-      console.log("game",gameObjects);
-      console.log("prop",properties);
-    },[gameObjects,properties])
+    const {objectId} = useContext(SelectedObjectContext)
 
     const [isCtrlPressed, setIsCtrlPressed] = useState(false);
     const handleKeyDown = (event) => {
@@ -33,46 +29,29 @@ function Editor() {
       window.addEventListener('keydown', handleKeyDown);
       window.addEventListener('keyup', handleKeyUp);
 
-
-        // Use map to iterate over both arrays simultaneously
         const combinedComponents = gameObjects.map((gameObject, index) => {
-          // Assuming each element in properties corresponds to the gameObject at the same index
-          const propertiesForGameObject = properties[index];
-          let assetType = propertiesForGameObject.type;
+          // Merge props from properties array
+          const combinedProps = properties[index]
+          let assetType = combinedProps.type;
           let prop = {
-            key: propertiesForGameObject.id,
-            // position: propertiesForGameObject.location,
-            rotation: [0,Math.PI,0]
+            key: combinedProps.id,
           }
-
           if(assetType=="splat"){
-            prop.src = propertiesForGameObject.url;
-            
-          }else if(assetType=="audio"){
-            // position:[0,0,0]
-          }
+              prop.src = combinedProps.url;
+          }      
+          // Create a new component with merged props
+          const combinedComponent = React.cloneElement(gameObject, prop);
       
-          // Return a new React component with properties as props
-          return React.cloneElement(gameObject, prop);
+          return <PivotControls key={index}>{combinedComponent}</PivotControls>;
         });
-
-
-
 
   return (
     <>
         <Canvas>
             <CameraControls enabled ={isCtrlPressed}/>
             <Ground />
-            
-
-              {gameObjects.length> 0 && (gameObjects.map((object, index) => (
-                <PivotControls key={index}>
-                  {/* <Splat url="https://huggingface.co/cakewalk/splat-data/resolve/main/garden.splat"/> */}
-                  {combinedComponents}
-                </PivotControls>
-              )))}
-              {/* https://huggingface.co/cakewalk/splat-data/resolve/main/garden.splat */}
+              {combinedComponents}
+              {/* https://huggingface.co/cakewalk/splat-data/resolve/main/nike.splat */}
         </Canvas>
     </>
   )

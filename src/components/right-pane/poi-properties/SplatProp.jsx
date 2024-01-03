@@ -3,22 +3,36 @@ import Transforms from '../Transforms'
 import { Button } from 'react-bootstrap'
 import { SelectedObjectContext } from '../../three-components/SelectedObjectProvider';
 import axios from 'axios';
+import { useProperties } from '../../three-components/PropertiesProvider';
 
 function SplatProp({url}) {
-  const { selectedObject,api,authToken,objectId,setSelectedObject,setSplatLocalUrls,locale,setLocale} = useContext(SelectedObjectContext);
-  const [splatLocalUrl, setSplatLocalUrl] = useState({
-    [objectId]: '',
-  });
+  const { api,authToken,objectId} = useContext(SelectedObjectContext);
+  const [splatLocalUrl, setSplatLocalUrl] = useState('');
+  const {properties,setProperties} = useProperties()
 
   const [lang, setLang] = useState()
 
+  useEffect(()=>{
+    setSplatLocalUrl(properties[objectId].url)
+    // console.log("splatProp",objectId,properties);
+  },[properties])
+
   const handleSplatFetch = () =>{
     fetchDataFromPoi()
-    setSplatLocalUrl(splatLocalUrl)
+    // setSplatLocalUrl(splatLocalUrl)
   }
   const handleSplatUpdate = () =>{
-    updatePoiData()
-    fetchDataFromPoi()
+    // updatePoiData()
+    // fetchDataFromPoi()
+    const updatedProperties = [...properties];
+      
+      // Update the 5th element (index 4) with a new value
+      updatedProperties[objectId].url = splatLocalUrl;
+      console.log("e",updatedProperties[objectId]);
+
+      // Call setProperties to update the state with the modified array
+      setProperties(updatedProperties);
+
   }
 
   const updatedPoiData = {
@@ -26,7 +40,7 @@ function SplatProp({url}) {
     POIId: "IVgWggHCA4xxMu6H6dTR",
     type: 9, 
     location: {
-      x: lang,
+      x: 0,
       y: 22.4194,
       z: -15.94
     },
@@ -69,6 +83,10 @@ function SplatProp({url}) {
       console.error('Failed to fetch from /poi/get', error.message);
     }
   };
+  const handleUrlChange = (e) => {
+    setSplatLocalUrl(e.target.value)
+  };
+  
 
   const updatePoiData =  async () => {
     try {
@@ -88,13 +106,15 @@ function SplatProp({url}) {
     }
   };
 
+  
+
   return (
     <>
-      <Transforms/>
+      <Transforms transforms = {properties[objectId]}/>
       <div className='property-container'>
         <h4>Splat Property</h4>
-        <input placeholder="Locale" onChange={(e)=>{setLang(e.target.value)}}/>
-        <input placeholder='Splat url' onChange={(e)=>{setSplatLocalUrl(e.target.value)}}/>
+        <input placeholder="Locale"/>
+        <input placeholder='Splat url' value={splatLocalUrl} onChange={handleUrlChange}/>
         <input placeholder='Exit portal'/>
         <input placeholder='Entry portal'/>
         <Button onClick={handleSplatFetch}>Fetch</Button>
