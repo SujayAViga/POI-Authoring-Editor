@@ -2,12 +2,18 @@
 import React, { useContext, useState } from 'react';
 import './CreatePoi.css';
 import Form from 'react-bootstrap/Form';
-import { Splat } from '@react-three/drei';
+
 import { useGameObjects } from '../three-components/GameObjectsProvider';
 import { useProperties } from '../three-components/PropertiesProvider';
-import SplatProp from '../right-pane/poi-properties/SplatProp';
+
 import { SelectedObjectContext } from '../three-components/SelectedObjectProvider';
 import { createNewProperties } from './propertiesUtils';
+
+import { Splat } from '@react-three/drei';
+import Cesium from '../poi-assets/Cesium';
+
+import SplatProp from '../right-pane/poi-properties/SplatProp';
+import CesiumProp from '../right-pane/poi-properties/CesiumProp';
 
 
 function CreatePoi({onClose,setPoiName,setPoiType}) {
@@ -56,7 +62,14 @@ function CreatePoi({onClose,setPoiName,setPoiType}) {
         if(poiTypeLocal==='9'){
             setObjectId(gameObjects.length)
             newGameObject = <Splat src={splatUrls} key={gameObjects.length} objectId={gameObjects.length}/>; // You can use a key to ensure uniqueness
-            newProperty = <SplatProp url={splatUrls} key={gameObjects.length} objectId={gameObjects.length}/>
+            // newProperty = <SplatProp url={splatUrls} key={gameObjects.length} objectId={gameObjects.length}/>
+        }
+        else if(poiTypeLocal=='2'){
+            setObjectId(gameObjects.length)
+            newGameObject = <Cesium
+              position = {[0,0,0]}
+            />
+            newProperty = <CesiumProp />
         }
         
         // Update the gameObjects array with the newSplat

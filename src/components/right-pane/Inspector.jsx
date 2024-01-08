@@ -71,6 +71,7 @@ function Inspector () {
     case '2':
       return (        
       <div className='inpector-container'>
+        <div className='property-container'>{selectedObject.poiName}</div>
         <CesiumProp key={Name} objectId={Name} />
       </div>)
     
