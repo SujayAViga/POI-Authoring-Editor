@@ -35,7 +35,10 @@ function CesiumProp() {
       <Transforms transforms={properties[objectId]}/>
       <div className='property-container'>
         <h4>Cesium Asset Prop</h4>
+        example id : 2342663<br/>
+        <label>Asset ID</label>
         <input placeholder='Asset ID' value={localAssetID} onChange={handleAssetIDChange}/>
+        <label>Access token</label>
         <input placeholder='Ion Token' value={localToken} onChange={handleTokenChange}/>
         <Button onClick={handleSplatUpdate}>Update</Button>
         

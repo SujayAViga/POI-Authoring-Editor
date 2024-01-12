@@ -27,15 +27,14 @@ const Cesium = (props:any): null => {
   }
   useEffect(() => {
     if(props.ionAssetId){
-      console.log(props.ionAssetId);
       const tilesRenderer = new CesiumIonTilesRenderer(props.ionAssetId,props.ionAccessToken);
       // const tilesRenderer = new TilesRenderer('https://raw.githubusercontent.com/NASA-AMMOS/3DTilesSampleData/master/msl-dingo-gap/0528_0260184_to_s64o256_colorize/0528_0260184_to_s64o256_colorize/0528_0260184_to_s64o256_colorize_tileset.json')
       tilesRenderer.setCamera(camera);
       tilesRenderer.setResolutionFromRenderer(camera, gl);
       tilesRenderer.fetchOptions.mode = 'cors';
-      tilesRenderer.lruCache.minSize = 900;
+      tilesRenderer.lruCache.minSize = 100;
       tilesRenderer.lruCache.maxSize = 1300;
-      tilesRenderer.errorTarget = 500;
+      tilesRenderer.errorTarget = 0;
       
       tilesRenderer.onLoadTileSet = ()=>{
         const sphere = new Sphere()    
@@ -52,9 +51,9 @@ const Cesium = (props:any): null => {
         tilesRenderer.group.quaternion.z = rotationToNorthPole.z;
         tilesRenderer.group.quaternion.w = rotationToNorthPole.w;
   
-        tilesRenderer.group.position.x = props.position[0];
-        tilesRenderer.group.position.y = -distanceToEllipsoidCenter + props.position[1];
-        tilesRenderer.group.position.z = props.position[2];
+        tilesRenderer.group.position.x = 0;
+        tilesRenderer.group.position.y = -distanceToEllipsoidCenter + 0;
+        tilesRenderer.group.position.z = 0;
       }
           const dracoLoader = new DRACOLoader();
           dracoLoader.setDecoderPath('https://unpkg.com/three@0.153.0/examples/jsm/libs/draco/gltf/');
@@ -75,12 +74,10 @@ const Cesium = (props:any): null => {
         scene.remove(tilesRenderer.group);
       };
     }
-  })
+  },[props.ionAssetId])
 
   useFrame(() => {
-    if(props.ionAssetId){
-      console.log("hello");
-      
+    if(props.ionAssetId){      
       if (!tilesRendererRef.current) return
       const tilesRenderer = tilesRendererRef.current as TilesRenderer;
       camera.updateMatrixWorld();

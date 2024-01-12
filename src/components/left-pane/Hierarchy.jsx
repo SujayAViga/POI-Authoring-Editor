@@ -47,7 +47,7 @@ function Hierarchy() {
             setMapName={setMapName}/>}
         {maps}
       </div>
-      <button className='save-button' >Save</button>
+      <button className='publish-button'>Publish</button>
     </div>
   )
 }

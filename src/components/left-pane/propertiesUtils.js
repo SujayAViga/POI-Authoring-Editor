@@ -14,8 +14,8 @@ export const createNewProperties = (poiTypeLocal, properties) => {
       },
       scale:{
         x: 1,
-        y: 0,
-        z: 0,
+        y: 1,
+        z: 1,
       },
     };
   
@@ -47,7 +47,8 @@ export const createNewProperties = (poiTypeLocal, properties) => {
         
         additionalProperties = {
           type:"glb",
-          url:''
+          // url:'',
+          url:'https://huggingface.co/datasets/sujayA7299/Splat-data/resolve/main/collider.glb'
         };
     }
     else if(poiTypeLocal === "4"){
