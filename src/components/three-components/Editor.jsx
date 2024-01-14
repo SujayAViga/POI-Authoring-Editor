@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
-import { CameraControls, Gltf, PivotControls, Splat, TransformControls } from '@react-three/drei'
+import { CameraControls, Gltf, Splat, TransformControls } from '@react-three/drei'
+import { PivotControls } from '../../assets/pivotControls';
 import Ground from './Ground';
 import './Editor.css'
 import { useGameObjects } from './GameObjectsProvider';
@@ -46,6 +47,15 @@ function Editor() {
           updatedProperties[objectId].rotation.y = thetaY;
           updatedProperties[objectId].rotation.z = thetaZ;
 
+          // Extracting the scaling values from the transformation matrix
+          const scaleX = Math.sqrt(e.elements[0] ** 2 + e.elements[4] ** 2 + e.elements[8] ** 2);
+          const scaleY = Math.sqrt(e.elements[1] ** 2 + e.elements[5] ** 2 + e.elements[9] ** 2);
+          const scaleZ = Math.sqrt(e.elements[2] ** 2 + e.elements[6] ** 2 + e.elements[10] ** 2);
+
+          updatedProperties[objectId].scale.x = scaleX;
+          updatedProperties[objectId].scale.y = scaleY;
+          updatedProperties[objectId].scale.z = scaleZ;
+
           // Call setProperties to update the state with the modified array
           setProperties(updatedProperties);
 
@@ -70,34 +80,47 @@ function Editor() {
             prop.ionAccessToken = combinedProps.accessToken
           }
           else if(assetType==="glb"){
-            prop.src = combinedProps.url;
+            if(combinedProps.url===''){
+              prop.src = 'https://huggingface.co/datasets/sujayA7299/Splat-data/resolve/main/empty.glb'
+            }else{
+              prop.src = combinedProps.url;
+            }
+              
+            
+            
             
           }
           // Create a new component with merged props
           const combinedComponent = React.cloneElement(gameObject, prop);
           if(assetType==="glb"){
-            return (
-            <PivotControls
-            fixed={false}
-            disableRotations={objectId!==index}
-            disableSliders={objectId!==index}
-            disableAxes={objectId!==index}
-            onDrag={(e)=>{handleDrag(e)}}
-            key={index}>
-              <RigidBody gravityScale={0} colliders={'hull'}>
-                {combinedComponent}
-              </RigidBody>
-            </PivotControls>)
+              return (
+                <PivotControls
+                depthTest={false}
+                disableRotations={objectId!==index}
+                disableSliders={objectId!==index}
+                disableAxes={objectId!==index}
+                onDrag={(e)=>{handleDrag(e)}}
+                scale={100}
+                fixed
+                lineWidth={4}
+                key={index}>
+                  <RigidBody gravityScale={0} colliders={'hull'}>
+                    {combinedComponent}
+                  </RigidBody>
+                </PivotControls>) 
+            
         }else{
           return (
             <PivotControls
-            scale={2}
-            fixed={false}
-             disableRotations={objectId!==index}
-             disableSliders={objectId!==index}
-             disableAxes={objectId!==index}
-             onDrag={(e)=>{handleDrag(e)}}
-             key={index}>
+                depthTest={false}
+                disableRotations={objectId!==index}
+                disableSliders={objectId!==index}
+                disableAxes={objectId!==index}
+                onDrag={(e)=>{handleDrag(e)}}
+                scale={100}
+                fixed
+                lineWidth={4}
+                key={index}>
               {combinedComponent}
           </PivotControls>)
         }
@@ -109,7 +132,7 @@ function Editor() {
             <CameraControls makeDefault/>
             <ambientLight intensity={Math.PI / 2} />
             <Ground />
-            <Physics debug>
+            <Physics>
               {combinedComponents}
             </Physics>
               {/* <Splat src='https://huggingface.co/datasets/sujayA7299/Splat-data/resolve/main/empty.splat'/> */}

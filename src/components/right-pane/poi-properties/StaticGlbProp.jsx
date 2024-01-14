@@ -58,7 +58,7 @@ function StaticGlbProp() {
     // store previous values of "properties" array
     const updatedProperties = [...properties];
     // update url 
-    updatedProperties[objectId].url = 'https://huggingface.co/datasets/sujayA7299/Splat-data/resolve/main/'+localUrl;
+    updatedProperties[objectId].url = localUrl;
     // set the updated properties as properties
     setProperties(updatedProperties);
     console.log(assetData.URL);

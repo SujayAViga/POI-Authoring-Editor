@@ -10,7 +10,7 @@ function Ground() {
       sectionSize: 3,
       sectionThickness: 1,
       sectionColor: 'white',
-      fadeDistance: 30,
+      // fadeDistance: 30,
       fadeStrength: 1,
       followCamera: false,
       infiniteGrid: true

@@ -47,8 +47,7 @@ export const createNewProperties = (poiTypeLocal, properties) => {
         
         additionalProperties = {
           type:"glb",
-          // url:'',
-          url:'https://huggingface.co/datasets/sujayA7299/Splat-data/resolve/main/collider.glb'
+          url:'',
         };
     }
     else if(poiTypeLocal === "4"){
