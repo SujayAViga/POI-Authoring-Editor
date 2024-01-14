@@ -2,13 +2,19 @@
 import React, { useContext, useState } from 'react';
 import './CreatePoi.css';
 import Form from 'react-bootstrap/Form';
-import { Splat } from '@react-three/drei';
+
 import { useGameObjects } from '../three-components/GameObjectsProvider';
 import { useProperties } from '../three-components/PropertiesProvider';
-import SplatProp from '../right-pane/poi-properties/SplatProp';
+
 import { SelectedObjectContext } from '../three-components/SelectedObjectProvider';
 import { createNewProperties } from './propertiesUtils';
 
+import { Gltf, Splat } from '@react-three/drei';
+import Cesium from '../poi-assets/Cesium';
+
+import SplatProp from '../right-pane/poi-properties/SplatProp';
+import CesiumProp from '../right-pane/poi-properties/CesiumProp';
+import { CuboidCollider, RigidBody,Physics } from "@react-three/rapier";
 
 function CreatePoi({onClose,setPoiName,setPoiType}) {
     const {setObjectId,api,authToken,splatUrls} = useContext(SelectedObjectContext)
@@ -56,8 +62,20 @@ function CreatePoi({onClose,setPoiName,setPoiType}) {
         if(poiTypeLocal==='9'){
             setObjectId(gameObjects.length)
             newGameObject = <Splat src={splatUrls} key={gameObjects.length} objectId={gameObjects.length}/>; // You can use a key to ensure uniqueness
-            newProperty = <SplatProp url={splatUrls} key={gameObjects.length} objectId={gameObjects.length}/>
+            // newProperty = <SplatProp url={splatUrls} key={gameObjects.length} objectId={gameObjects.length}/>
         }
+        else if(poiTypeLocal=='2'){
+            setObjectId(gameObjects.length)
+            newGameObject = <Cesium
+            position={[0,0,0]}
+            />
+            newProperty = <CesiumProp />
+        }else if(poiTypeLocal=='3'){
+          setObjectId(gameObjects.length)
+          newGameObject = <Gltf />
+          
+          newProperty = <CesiumProp />
+      }
         
         // Update the gameObjects array with the newSplat
         setProperties((prevProperties)=>[...prevProperties],newProperty)
@@ -74,14 +92,14 @@ function CreatePoi({onClose,setPoiName,setPoiType}) {
             <input placeholder='Poi Name' onChange={(e)=>{setPoiName(e.target.value)}}/>
             <Form.Select size='lg' style={{ width: "100%", height: "2em", padding: "1%", margin: '1%', fontSize: 16,borderRadius:5 }} onChange={(e)=>{setPoiType(e.target.value); setPoiTypeLocal(e.target.value)}}>
                 <option>POI type</option>
-                <option value="1">Point Cloud</option>
+                {/* <option value="1">Point Cloud</option> */}
                 <option value="2">Cesium</option>
                 <option value="3">glb/Gltf</option>
-                <option value="4">Animated GLB</option>
+                {/* <option value="4">Animated GLB</option>
                 <option value="5">Image</option>
                 <option value="6">Video</option>
                 <option value="7">Text</option>
-                <option value="8">Audio</option>
+                <option value="8">Audio</option> */}
                 <option value="9">Splat</option>
             </Form.Select>
             <button onClick={handleAddPoi} type='submit'>Create</button>

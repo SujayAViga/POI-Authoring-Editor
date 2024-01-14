@@ -12,7 +12,9 @@
   "dependencies": {
     "@react-three/drei": "^9.92.1",
     "@react-three/fiber": "^8.15.12",
+    "@react-three/rapier": "^1.2.1",
     "@types/three": "^0.159.0",
+    "3d-tiles-renderer": "^0.3.22",
     "axios": "^1.6.3",
     "bootstrap": "^5.3.2",
     "react": "^18.2.0",

@@ -14,8 +14,8 @@ export const createNewProperties = (poiTypeLocal, properties) => {
       },
       scale:{
         x: 1,
-        y: 0,
-        z: 0,
+        y: 1,
+        z: 1,
       },
     };
   
@@ -37,8 +37,9 @@ export const createNewProperties = (poiTypeLocal, properties) => {
         
         additionalProperties = {
           type:"cesium",
-          accessToken: '1234',
-          assetID: '2'
+          // assetID: '2342663',
+          assetID: '',
+          accessToken : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIyZjk1OTU2My1mNDBhLTQzYzEtOTcxMS01MzNiOWIxMDZiYTMiLCJpZCI6MTY2MDkxLCJpYXQiOjE2OTQ1NDMyOTN9.rHxFqNMZ26EFHwHYUJ-xW0fDZtjamHXiM-4HR6YIHXY'
         };
     }
     else if(poiTypeLocal === "3"){
@@ -46,7 +47,7 @@ export const createNewProperties = (poiTypeLocal, properties) => {
         
         additionalProperties = {
           type:"glb",
-          url:''
+          url:'',
         };
     }
     else if(poiTypeLocal === "4"){
