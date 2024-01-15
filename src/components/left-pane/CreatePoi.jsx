@@ -15,6 +15,7 @@ import Cesium from '../poi-assets/Cesium';
 import SplatProp from '../right-pane/poi-properties/SplatProp';
 import CesiumProp from '../right-pane/poi-properties/CesiumProp';
 import { CuboidCollider, RigidBody,Physics } from "@react-three/rapier";
+import StaticGlbProp from '../right-pane/poi-properties/StaticGlbProp';
 
 function CreatePoi({onClose,setPoiName,setPoiType}) {
     const {setObjectId,api,authToken,splatUrls} = useContext(SelectedObjectContext)
@@ -62,23 +63,21 @@ function CreatePoi({onClose,setPoiName,setPoiType}) {
         if(poiTypeLocal==='9'){
             setObjectId(gameObjects.length)
             newGameObject = <Splat src={splatUrls} key={gameObjects.length} objectId={gameObjects.length}/>; // You can use a key to ensure uniqueness
-            // newProperty = <SplatProp url={splatUrls} key={gameObjects.length} objectId={gameObjects.length}/>
+
         }
         else if(poiTypeLocal=='2'){
             setObjectId(gameObjects.length)
             newGameObject = <Cesium
             position={[0,0,0]}
             />
-            newProperty = <CesiumProp />
+
         }else if(poiTypeLocal=='3'){
           setObjectId(gameObjects.length)
           newGameObject = <Gltf />
-          
-          newProperty = <CesiumProp />
       }
         
         // Update the gameObjects array with the newSplat
-        setProperties((prevProperties)=>[...prevProperties],newProperty)
+        // setProperties((prevProperties)=>[...prevProperties],newProperty)
         setGameObjects((prevGameObjects) => [...prevGameObjects, newGameObject]);
     }
 

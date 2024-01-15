@@ -14,8 +14,8 @@ function SplatProp() {
   useEffect(()=>{
     setSplatLocalUrl(properties[objectId].url)
     setAssetData({
-      mapId: "46djYs1XYstXTKT4JAlh",
-      POIId: "IVgWggHCA4xxMu6H6dTR",
+      mapId: "Ha7ZvmsazerrizPETEJL",
+      POIId: "nRZH7XIM9TnjnypSvXM2",
       language: "english",
       URL: properties[objectId].url,
       text: "this is an example text",
@@ -48,9 +48,14 @@ function SplatProp() {
     })
   },[properties])
 
-  const handleSplatFetch = () =>{
-
-  }
+  
+  useEffect(()=>{
+    if(authToken){
+      updateAssetData().then(()=>{
+        fetchDataFromAssets()
+      })
+    }
+  },[assetData])
   
   const handleSplatUpdate = () =>{
     // store previous values of "properties" array
@@ -61,11 +66,7 @@ function SplatProp() {
     setProperties(updatedProperties);
     
     console.log(assetData.URL);
-    if(authToken){
-      updateAssetData().then(()=>{
-        fetchDataFromAssets()
-      })
-    }
+    
   }
   const handleUrlChange = (e) => {
     setSplatLocalUrl(e.target.value)
@@ -76,8 +77,8 @@ function SplatProp() {
       const response = await api.post(
         'asset/get/',
         {
-          mapId: "46djYs1XYstXTKT4JAlh",
-          POIId: "IVgWggHCA4xxMu6H6dTR"
+          mapId: "Ha7ZvmsazerrizPETEJL",
+          POIId: "nRZH7XIM9TnjnypSvXM2"
         },
         {
           headers: {

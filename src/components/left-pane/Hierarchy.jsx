@@ -1,4 +1,4 @@
-import React,{useContext, useState} from 'react'
+import React,{useContext, useEffect, useState} from 'react'
 import UserDetails from './UserDetails'
 import Map from './Map';
 import './Hierarchy.css'
@@ -23,6 +23,7 @@ function Hierarchy() {
   };
 
   const handleCloseCreateMapModal = () => {
+    // to close the Modal
     setCreateMapModalOpen(false);
     if(mapName!==""){
       handleAddMap()
@@ -32,6 +33,11 @@ function Hierarchy() {
     }
     
   };
+
+  // publish data to the backend
+  const handlePublish = ()=>{
+    console.log("publish");
+  }
   
 
   return (
@@ -47,7 +53,7 @@ function Hierarchy() {
             setMapName={setMapName}/>}
         {maps}
       </div>
-      <button className='publish-button'>Publish</button>
+      <button className='publish-button' onClick={handlePublish}>Publish</button>
     </div>
   )
 }

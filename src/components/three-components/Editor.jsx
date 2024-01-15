@@ -81,7 +81,7 @@ function Editor() {
           }
           else if(assetType==="glb"){
             if(combinedProps.url===''){
-              prop.src = 'https://huggingface.co/datasets/sujayA7299/Splat-data/resolve/main/empty.glb'
+              prop.src = 'https://huggingface.co/datasets/sujayA7299/Splat-data/resolve/main/building.glb'
             }else{
               prop.src = combinedProps.url;
             }

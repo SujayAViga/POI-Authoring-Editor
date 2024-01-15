@@ -15,8 +15,8 @@ function StaticGlbProp() {
   useEffect(()=>{
     setLocalUrl(properties[objectId].url)
     setAssetData({
-      mapId: "46djYs1XYstXTKT4JAlh",
-      POIId: "IVgWggHCA4xxMu6H6dTR",
+      mapId: "Ha7ZvmsazerrizPETEJL",
+      POIId: "DxWIjFstbndT0ikkaxb5",
       language: "english",
       URL: properties[objectId].url,
       text: "this is an example text",
@@ -66,6 +66,7 @@ function StaticGlbProp() {
       updateAssetData().then(()=>{
         fetchDataFromAssets()
       })
+      // addDataToAsset()
     }
   }
 
@@ -75,8 +76,8 @@ function StaticGlbProp() {
       const response = await api.post(
         'asset/get/',
         {
-          mapId: "46djYs1XYstXTKT4JAlh",
-          POIId: "IVgWggHCA4xxMu6H6dTR"
+          mapId: "Ha7ZvmsazerrizPETEJL",
+          POIId: "DxWIjFstbndT0ikkaxb5"
         },
         {
           headers: {
