@@ -45,7 +45,7 @@ function CreateMap({onClose,setMapName}) {
                 </span>
                 <h2 style={{color:'black'}}>Create Map</h2>
                 <input placeholder='Map Name' onChange={(e)=>{setMapName(e.target.value)}}/>
-                <button onClick={handleAddMap} type='submit'>Create</button>
+                <button className='button' onClick={handleAddMap} type='submit'>Create</button>
             </div>
         </div>
     );

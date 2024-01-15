@@ -2,6 +2,7 @@
     background-color: rgb(145, 145, 145);
     width: 20em;
     overflow-y: scroll;
+    color: white;
 }
 
 .property-container{

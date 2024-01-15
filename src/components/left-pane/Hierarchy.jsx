@@ -38,7 +38,7 @@ function Hierarchy() {
     <div className='hierarchy-container' >
       <UserDetails/>
       <div className='gameobject-container'>
-        <button onClick={handleOpenCreateMapModal}>Create Map</button>
+        <button className='button' onClick={handleOpenCreateMapModal}>Create Map</button>
 
         {isCreateMapModalOpen &&
            <CreateMap 
@@ -47,7 +47,7 @@ function Hierarchy() {
             setMapName={setMapName}/>}
         {maps}
       </div>
-      <button className='publish-button'>Publish</button>
+      <button className='publish-button button'>Publish</button>
     </div>
   )
 }

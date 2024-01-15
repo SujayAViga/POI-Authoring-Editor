@@ -43,8 +43,8 @@ const Map = ({ mapName }) => {
     
       return (
         <div className='map-container'>
-          <h3>{mapName}</h3>
-          <button onClick={handleOpenCreatePoiModal}>Create POI</button>
+          <h3 style={{color:'white'}}>{mapName}</h3>
+          <button className='button' onClick={handleOpenCreatePoiModal}>Create POI</button>
          
           {/* Render the CreatePoi modal if it's open */}
           {isCreatePoiModalOpen &&

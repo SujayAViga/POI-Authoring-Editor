@@ -1,14 +1,19 @@
+
+.button{
+  color: white;
+  background-color: rgb(27, 27, 27);
+}
 .hierarchy-container{
     background-color: rgb(145, 145, 145);
     text-align: left;
     padding: 1em;
     width: 25em;
     /* position: static; */
-    
 }
 
 .user-container{
   background-color: rgb(46, 46, 46);
+  color: white;
   padding: 2%;
   margin: 3%;
   justify-content: center;
@@ -23,7 +28,7 @@
 }
 
 .publish-button {
-
+    
     width: 15em;
     transform: translateX(-0%);
   }
