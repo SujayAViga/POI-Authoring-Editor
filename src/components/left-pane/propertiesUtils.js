@@ -1,6 +1,8 @@
 
 export const createNewProperties = (poiTypeLocal, properties) => {
     const baseProperties = {
+      poiId:'',
+      assetCreated: false,
       id: properties.length,
       location: {
         x: 0,
@@ -94,7 +96,7 @@ export const createNewProperties = (poiTypeLocal, properties) => {
       
       additionalProperties = {
         type:"splat",
-        url: '',
+        url: 'a',
       };
     } 
     

@@ -5,33 +5,22 @@ import { SelectedObjectContext } from '../three-components/SelectedObjectProvide
 import { useFrame } from '@react-three/fiber';
 
 function CreateMap({onClose,setMapName}) {
-    const {authToken,api,maps,setMaps} = useContext(SelectedObjectContext);
+    const {authToken,api,fetchDataFromMap} = useContext(SelectedObjectContext);
     const [localMaps, setLocalMaps] = useState(null)
     const [localMapName, setLocalMapName] = useState()
 
     useEffect(()=>{
-      console.log("maps",localMaps);      
-    },[maps])
-    const deleteMapData = async (mapId) => {
-      try {
-        const response = await api.delete(`map/${mapId}`, {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-            'Content-Type': 'application/json',
-          },
-        });
-    
-        console.log(`Deleted map with ID ${mapId}`, response.status);
-      } catch (error) {
-        console.error(`Failed to delete map with ID ${mapId}`, error.message);
+      if(authToken){
+        fetchDataFromMap()
       }
-    };
+      
+    },[authToken])
+
 
     const handleAddMap = () => {
-        fetchDataFromMap().then(()=>{
+        // fetchDataFromMap().then(()=>{
           onClose()
-        })
-     
+        // })
     };
 
     const addDataToMap = async () => {
@@ -54,23 +43,6 @@ function CreateMap({onClose,setMapName}) {
       }
     };
     
-    const fetchDataFromMap = async () => {
-        try {
-          const response = await api.get('map/', {
-            headers: {
-              Authorization: `Bearer ${authToken}`, 
-            },
-          });
-          // Handle the response here
-          console.log('Data from /map/:', response.data);
-          // setMaps(response.data);
-          // a = response.data
-        } catch (error) {
-          // Handle errors here
-          console.error('Failed to fetch data from /map/:', error.message);
-        }
-      };
-
     return (
         <div className="modal-overlay">
             <div className="modal-content">

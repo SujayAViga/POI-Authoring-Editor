@@ -21,7 +21,19 @@ function Inspector () {
 
   const { selectedObject, authToken,setAuthToken,api } = useContext(SelectedObjectContext);
   
+  useEffect(()=>{
+    
+    if(selectedObject){
+      setName(selectedObject.poiName)
+      setType(selectedObject.poiType)
+      setLang(selectedObject.locale)
+    }
+   
+  },[selectedObject])
 
+  useEffect(()=>{
+    handleLogin();
+  },[])
 
   const handleLogin = async () => {
     try {
@@ -46,15 +58,7 @@ function Inspector () {
   };
   
 
-  useEffect(()=>{
-    handleLogin();
-    if(selectedObject){
-      setName(selectedObject.poiName)
-      setType(selectedObject.poiType)
-      setLang(selectedObject.locale)
-    }
-   
-  })
+
   
   if (!selectedObject) {
     return <div>Select a game object to view properties.</div>;

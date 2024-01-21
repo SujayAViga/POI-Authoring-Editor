@@ -85,10 +85,6 @@ function Editor() {
             }else{
               prop.src = combinedProps.url;
             }
-              
-            
-            
-            
           }
           // Create a new component with merged props
           const combinedComponent = React.cloneElement(gameObject, prop);

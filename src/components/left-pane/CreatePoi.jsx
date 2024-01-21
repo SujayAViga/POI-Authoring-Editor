@@ -1,5 +1,5 @@
 // CreatePoi.js
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './CreatePoi.css';
 import Form from 'react-bootstrap/Form';
 
@@ -18,52 +18,74 @@ import { CuboidCollider, RigidBody,Physics } from "@react-three/rapier";
 import StaticGlbProp from '../right-pane/poi-properties/StaticGlbProp';
 
 function CreatePoi({onClose,setPoiName,setPoiType}) {
-    const {setObjectId,api,authToken,splatUrls} = useContext(SelectedObjectContext)
+    const {setObjectId,objectId,splatUrls,mapId,createNewPoiData,mapData,fetchPoiData,poiData} = useContext(SelectedObjectContext)
     const [poiTypeLocal, setPoiTypeLocal] = useState(null)
+    const [newPoiData, setNewPoiData] = useState(null)
 
-
-    const {gameObjects,setGameObjects} = useGameObjects(0)
+    const {gameObjects,setGameObjects} = useGameObjects()
     // get ref to global array that stores all game object properties
     const {properties, setProperties} = useProperties()
+
+    useEffect(()=>{
+      console.log("po",poiData);
+    },[poiData])
+
     // add new properties of game objects to the array
     const handleAddProperties = () => {
       const newProperties = createNewProperties(poiTypeLocal,properties)
+      // console.log(mapData);
+      // newProperties.poiId = 
       setProperties((prevInstances) => [...prevInstances, newProperties]);
   };
+  
+  useEffect(()=>{
+    if(newPoiData){
+      createNewPoiData(newPoiData).then(()=>{
+        console.log("new Data",newPoiData);
+        fetchPoiData(mapId).then(()=>{
+          onClose()
+        })
+
+      })
+    }
+    
+  },[newPoiData])
 
     const handleAddPoi = () => {
         createGameobject()
         handleAddProperties()
-        onClose(); // Close the modal
     };
-
-    const addDataToPoi = async () => {
-        try {
-          const response = await api.post(
-            'poi/',
-            updatedPoiData,
-            {
-              headers: {
-                Authorization: `Bearer ${authToken}`,
-                'Content-Type': 'application/json', // Add this line
-              },
-            }
-          );
-          console.log("Posted poi data successfully", response.status);
-        } catch (error) {
-          console.error('Failed to post data to /poi/', error.message);
-        }
-      };
-
       
-    //   https://huggingface.co/cakewalk/splat-data/resolve/main/nike.splat
-
     let newGameObject,newProperty;
     const createGameobject = () =>{
         if(poiTypeLocal==='9'){
             setObjectId(gameObjects.length)
-            newGameObject = <Splat src={splatUrls} key={gameObjects.length} objectId={gameObjects.length}/>; // You can use a key to ensure uniqueness
-
+            newGameObject = <Splat src={splatUrls} key={gameObjects.length} objectId={gameObjects.length+1}/>; // You can use a key to ensure uniqueness
+            setNewPoiData({
+              mapId: mapId,
+              type: 9, 
+              location: {
+                x: 0,
+                y: 0,
+                z: 0
+              },
+              rotation: {
+                x: 0,
+                y: 0,
+                z: 0,
+                w: 35.56
+              },
+              scale: {
+                x: 0,
+                y: 0,
+                z: 0,
+              },
+              tags: [
+                "123",
+                "tag1",
+                "tag2"
+              ]
+            })
         }
         else if(poiTypeLocal=='2'){
             setObjectId(gameObjects.length)

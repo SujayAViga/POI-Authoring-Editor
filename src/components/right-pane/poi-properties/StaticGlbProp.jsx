@@ -5,7 +5,7 @@ import { SelectedObjectContext } from '../../three-components/SelectedObjectProv
 import { Button } from 'react-bootstrap';
 
 function StaticGlbProp() {
-  const { objectId,authToken,api} = useContext(SelectedObjectContext);
+  const { objectId,authToken,api,mapId} = useContext(SelectedObjectContext);
   const {properties,setProperties} = useProperties()
   const [localUrl, setLocalUrl] = useState('')
   const [assetData, setAssetData] = useState()
@@ -15,7 +15,7 @@ function StaticGlbProp() {
   useEffect(()=>{
     setLocalUrl(properties[objectId].url)
     setAssetData({
-      mapId: "Ha7ZvmsazerrizPETEJL",
+      mapId: mapId,
       POIId: "DxWIjFstbndT0ikkaxb5",
       language: "english",
       URL: properties[objectId].url,

@@ -1,19 +1,25 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import { SelectedObjectContext } from '../three-components/SelectedObjectProvider';
 import { useGameObjects } from '../three-components/GameObjectsProvider';
 import { useProperties } from '../three-components/PropertiesProvider';
 
 const Poi = ({ poiName,poiType,objectId,locale }) => {
-  const { setSelectedObject,setObjectId } = useContext(SelectedObjectContext);
+  const { setSelectedObject,setObjectId,fetchPoiData,mapId,poiData } = useContext(SelectedObjectContext);
   const {properties} = useProperties()
   const {gameObjects} = useGameObjects()
 
-
+  useEffect(()=>{
+    fetchPoiData(mapId).then(()=>{
+      console.log(poiData);
+      properties[objectId-1].poiId = poiData[objectId-1].POIId
+    })
+  },[])
 
   const handleObjectSelection = () => {
     setSelectedObject({poiType,poiName,locale});
-    setObjectId(objectId)
+    setObjectId(objectId-1)
+    
   };
 
   const poitype = {

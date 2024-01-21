@@ -1,21 +1,56 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import Transforms from '../Transforms'
 import { Button } from 'react-bootstrap'
 import { SelectedObjectContext } from '../../three-components/SelectedObjectProvider';
 import { useProperties } from '../../three-components/PropertiesProvider';
 
 function SplatProp() {
-  const { objectId,authToken,api} = useContext(SelectedObjectContext);
+  const { objectId,authToken,api,mapId,createNewPoiData,poiData,setPoiData,mapData,updatePoiData,fetchPoiData,fetchDataFromAssets,addDataToAsset,updateAssetData} = useContext(SelectedObjectContext);
   const [splatLocalUrl, setSplatLocalUrl] = useState('');
   const {properties,setProperties} = useProperties()
   const [assetData, setAssetData] = useState()
+  const [updatedPoiData, setUpdatedPoiData] = useState(null)
+  const assetCreated = useRef(false)
 
+  useEffect(()=>{
+    console.log("cyr",properties[objectId]);
+  },[])
 
   useEffect(()=>{
     setSplatLocalUrl(properties[objectId].url)
+
+    setUpdatedPoiData(
+      {
+        mapId: mapId,
+        POIId: properties[objectId].poiId,
+        type: "9",
+        location: {
+          x: properties[objectId].location.x,
+          y: properties[objectId].location.y,
+          z: properties[objectId].location.z
+        },
+        rotation: {
+          x: properties[objectId].rotation.x,
+          y: properties[objectId].rotation.y,
+          z: properties[objectId].rotation.z,
+          w: 35.56
+        },
+        scale: {
+          x: properties[objectId].scale.x,
+          y: properties[objectId].scale.y,
+          z: properties[objectId].scale.z,
+        },
+        tags: [
+          "123",
+          "tag1",
+          "tag2"
+        ]
+      }
+    )
+    
     setAssetData({
-      mapId: "Ha7ZvmsazerrizPETEJL",
-      POIId: "nRZH7XIM9TnjnypSvXM2",
+      mapId: mapId,
+      POIId: properties[objectId].poiId,
       language: "english",
       URL: properties[objectId].url,
       text: "this is an example text",
@@ -48,15 +83,29 @@ function SplatProp() {
     })
   },[properties])
 
-  
   useEffect(()=>{
-    if(authToken){
-      updateAssetData().then(()=>{
-        fetchDataFromAssets()
-      })
+    // create asset if not else update the existing asset
+    if(assetData && !properties[objectId].assetCreated){
+      if(authToken){
+        addDataToAsset(assetData).then(()=>{
+          properties[objectId].assetCreated = true
+        })
+      }
+      
+    }else if(assetData && properties[objectId].assetCreated){
+      if(updatedPoiData){
+        updatePoiData(updatedPoiData).then(()=>{
+          updateAssetData(assetData).then(()=>{
+            fetchPoiData(mapId).then(()=>{
+              fetchDataFromAssets(mapId,properties[objectId].poiId)
+            })
+          })
+        })
+      }
     }
+    
   },[assetData])
-  
+
   const handleSplatUpdate = () =>{
     // store previous values of "properties" array
     const updatedProperties = [...properties];
@@ -65,70 +114,13 @@ function SplatProp() {
     // set the updated properties as properties
     setProperties(updatedProperties);
     
-    console.log(assetData.URL);
-    
   }
+
+
   const handleUrlChange = (e) => {
     setSplatLocalUrl(e.target.value)
   };
 
-  const fetchDataFromAssets = async () =>{
-    try {
-      const response = await api.post(
-        'asset/get/',
-        {
-          mapId: "Ha7ZvmsazerrizPETEJL",
-          POIId: "nRZH7XIM9TnjnypSvXM2"
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        }
-      );
-      // console.log("Assets fetched",response.data);
-      setAssetData(response.data)
-    } catch (error) {
-      console.error('Failed to fetch from /assets/get', error.message);
-    }
-  };
-  
-  
-
-  const addDataToAsset = async () => {
-    try {
-      const response = await api.post(
-        'asset/',
-        assetData,
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        }
-      );
-      console.log("Asset created!! ", response.status);
-    } catch (error) {
-      console.error('Failed to post data to /asset/', error.message);
-    }
-  };
-
-  const updateAssetData =  async () => {
-    try {
-      const response = await api.patch(
-        `asset/`, // Update the url with the specific POI ID
-        assetData,
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-      console.log("Updated asset data successfully", response.status);
-    } catch (error) {
-      console.error('Failed to update data to /asset/', error.message);
-    }
-  };
   
   return (
     <>
