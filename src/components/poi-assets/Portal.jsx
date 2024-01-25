@@ -1,33 +1,20 @@
-import { CuboidCollider } from '@react-three/rapier'
-import React from 'react'
+import { CuboidCollider, RigidBody } from '@react-three/rapier'
+import React, { useContext, useEffect, useState } from 'react'
+import { useProperties } from '../three-components/PropertiesProvider'
+import { SelectedObjectContext } from '../three-components/SelectedObjectProvider';
+import { Box } from '@react-three/drei';
 
-function Portal({setPlayerPosition,exit,position,playerPosition,name,setSplatVisible,args,rotation}) {
+function Portal({rotation,args,exit}) {
+  const { objectId,authToken,api,mapId,createNewPoiData,poiData,setPoiData,mapData,updatePoiData,fetchPoiData,fetchDataFromAssets,addDataToAsset,updateAssetData} = useContext(SelectedObjectContext);
+
+  const {properties,setProperties} = useProperties()
   
-  const handleIntersection = (e)=>{
-    const collidedObject = e.rigidBodyObject.name
-    const portalName = e.target.colliderObject.name
-
-    if(collidedObject=="Player"){
-      setPlayerPosition([...exit])
-      if(portalName=="entry"){
-        setSplatVisible(true)
-      }else{
-        setSplatVisible(false)
-      }
-    }
-    
-  }
 
   return (
     <>
-        <CuboidCollider
-            name={name}
-            position={position}
-            rotation={rotation}
-            args={args}
-            sensor
-            onIntersectionEnter={handleIntersection}
-        />
+        <Box position={[0, 0, 0]} scale={[1, 1, 1]}>
+          <meshPhongMaterial color="#00ff00" wireframe/>
+        </Box>        
     </>
   )
 }

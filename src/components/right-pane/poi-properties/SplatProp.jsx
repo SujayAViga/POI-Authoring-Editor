@@ -5,7 +5,7 @@ import { SelectedObjectContext } from '../../three-components/SelectedObjectProv
 import { useProperties } from '../../three-components/PropertiesProvider';
 
 function SplatProp() {
-  const { objectId,authToken,api,mapId,createNewPoiData,poiData,setPoiData,mapData,updatePoiData,fetchPoiData,fetchDataFromAssets,addDataToAsset,updateAssetData} = useContext(SelectedObjectContext);
+  const { objectId,setAutoSave,autoSave,authToken,api,mapId,createNewPoiData,poiData,setPoiData,mapData,updatePoiData,fetchPoiData,fetchDataFromAssets,addDataToAsset,updateAssetData} = useContext(SelectedObjectContext);
   const [splatLocalUrl, setSplatLocalUrl] = useState('');
   const {properties,setProperties} = useProperties()
   const [assetData, setAssetData] = useState()
@@ -17,6 +17,7 @@ function SplatProp() {
   },[])
 
   useEffect(()=>{
+    
     setSplatLocalUrl(properties[objectId].url)
 
     setUpdatedPoiData(
@@ -40,47 +41,25 @@ function SplatProp() {
           y: properties[objectId].scale.y,
           z: properties[objectId].scale.z,
         },
-        tags: [
-          "123",
-          "tag1",
-          "tag2"
-        ]
       }
     )
     
-    setAssetData({
-      mapId: mapId,
-      POIId: properties[objectId].poiId,
-      language: "english",
-      URL: properties[objectId].url,
-      text: "this is an example text",
-      exitPortalPosition: {
-        x: properties[objectId].location.x,
-        y: properties[objectId].location.y,
-        z: properties[objectId].location.z
-      },
-      exitPortalRotation: {
-        x: properties[objectId].rotation.x,
-        y: properties[objectId].rotation.y,
-        z: properties[objectId].rotation.z,
-        w: 0.4
-      },
-      exitPortalScale: {
-        x: 1.5,
-        y: 1.5,
-        z: 1.5
-      },
-      exitPortalText: "string",
-      splatBoundaryCenter: {
-        x: 0,
-        y: 0,
-        z: 0
-      },
-      splatBoundaryRadius: 0,
-      splatBoundaryWidth: 0,
-      splatBoundaryHeight: 0,
-      splatBoundaryLength: 0
-    })
+    
+    if(properties[objectId].url){
+      setAssetData({
+        mapId: mapId,
+        POIId: properties[objectId].poiId,
+        language: properties[objectId].locale,
+        URL: properties[objectId].url,
+      })
+    }else{
+      setAssetData({
+        mapId: mapId,
+        POIId: properties[objectId].poiId,
+        language: properties[objectId].locale,
+      })
+    }
+    
   },[properties])
 
   useEffect(()=>{
@@ -93,7 +72,8 @@ function SplatProp() {
       }
       
     }else if(assetData && properties[objectId].assetCreated){
-      if(updatedPoiData){
+      console.log(autoSave);
+      if(updatedPoiData && autoSave){
         updatePoiData(updatedPoiData).then(()=>{
           updateAssetData(assetData).then(()=>{
             fetchPoiData(mapId).then(()=>{
@@ -102,9 +82,10 @@ function SplatProp() {
           })
         })
       }
+      setAutoSave(false)
     }
     
-  },[assetData])
+  })
 
   const handleSplatUpdate = () =>{
     // store previous values of "properties" array
@@ -113,7 +94,6 @@ function SplatProp() {
     updatedProperties[objectId].url = splatLocalUrl;
     // set the updated properties as properties
     setProperties(updatedProperties);
-    
   }
 
 
@@ -127,11 +107,8 @@ function SplatProp() {
       <Transforms transforms = {properties[objectId]}/>
       <div className='property-container'>
         <h4>Splat Property</h4>
-        <input placeholder="Locale"/>
+        <input placeholder="Locale" value={properties[objectId].locale} onChange={console.log()}/>
         <input placeholder='Splat url' value={splatLocalUrl} onChange={handleUrlChange}/>
-        <input placeholder='Exit portal'/>
-        <input placeholder='Entry portal'/>
-        {/* <Button onClick={handleSplatFetch}>Fetch</Button> */}
         <Button onClick={handleSplatUpdate}>Update</Button>
       </div>
     </>

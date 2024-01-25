@@ -9,6 +9,7 @@ const Poi = ({ poiName,poiType,objectId,locale }) => {
   const {properties} = useProperties()
   const {gameObjects} = useGameObjects()
 
+  // fetch map 
   useEffect(()=>{
     fetchPoiData(mapId).then(()=>{
       console.log(poiData);
@@ -19,6 +20,7 @@ const Poi = ({ poiName,poiType,objectId,locale }) => {
   const handleObjectSelection = () => {
     setSelectedObject({poiType,poiName,locale});
     setObjectId(objectId-1)
+    console.log(objectId-1);
     
   };
 
@@ -31,7 +33,8 @@ const Poi = ({ poiName,poiType,objectId,locale }) => {
     "6": "Video",
     "7": "Text",
     "8": "Audio",
-    "9": "Splat"
+    "9": "Splat",
+    "10": "Portal"
   }
     return (
       <div className='property-container'>

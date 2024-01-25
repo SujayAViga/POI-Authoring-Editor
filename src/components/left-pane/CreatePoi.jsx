@@ -16,6 +16,7 @@ import SplatProp from '../right-pane/poi-properties/SplatProp';
 import CesiumProp from '../right-pane/poi-properties/CesiumProp';
 import { CuboidCollider, RigidBody,Physics } from "@react-three/rapier";
 import StaticGlbProp from '../right-pane/poi-properties/StaticGlbProp';
+import Portal from '../poi-assets/Portal';
 
 function CreatePoi({onClose,setPoiName,setPoiType}) {
     const {setObjectId,objectId,splatUrls,mapId,createNewPoiData,mapData,fetchPoiData,poiData} = useContext(SelectedObjectContext)
@@ -26,15 +27,9 @@ function CreatePoi({onClose,setPoiName,setPoiType}) {
     // get ref to global array that stores all game object properties
     const {properties, setProperties} = useProperties()
 
-    useEffect(()=>{
-      console.log("po",poiData);
-    },[poiData])
-
     // add new properties of game objects to the array
     const handleAddProperties = () => {
       const newProperties = createNewProperties(poiTypeLocal,properties)
-      // console.log(mapData);
-      // newProperties.poiId = 
       setProperties((prevInstances) => [...prevInstances, newProperties]);
   };
   
@@ -45,7 +40,6 @@ function CreatePoi({onClose,setPoiName,setPoiType}) {
         fetchPoiData(mapId).then(()=>{
           onClose()
         })
-
       })
     }
     
@@ -54,6 +48,7 @@ function CreatePoi({onClose,setPoiName,setPoiType}) {
     const handleAddPoi = () => {
         createGameobject()
         handleAddProperties()
+        // onClose()
     };
       
     let newGameObject,newProperty;
@@ -96,6 +91,9 @@ function CreatePoi({onClose,setPoiName,setPoiType}) {
         }else if(poiTypeLocal=='3'){
           setObjectId(gameObjects.length)
           newGameObject = <Gltf />
+      }else if(poiTypeLocal==='10'){
+        setObjectId(gameObjects.length)
+        newGameObject = <Portal />
       }
         
         // Update the gameObjects array with the newSplat
@@ -122,6 +120,7 @@ function CreatePoi({onClose,setPoiName,setPoiType}) {
                 <option value="7">Text</option>
                 <option value="8">Audio</option> */}
                 <option value="9">Splat</option>
+                <option value="10">Portal</option>
             </Form.Select>
             <button onClick={handleAddPoi} type='submit'>Create</button>
         </div>

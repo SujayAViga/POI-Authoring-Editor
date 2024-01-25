@@ -10,12 +10,13 @@ import { useProperties } from './PropertiesProvider';
 import Cesium from '../poi-assets/Cesium';
 import { Physics, RigidBody } from '@react-three/rapier';
 import { radToDeg } from 'three/src/math/MathUtils';
+import Portal from '../poi-assets/Portal';
 
 function Editor() {    
 
     const { gameObjects, setGameObjects } = useGameObjects();
     const {properties,setProperties,testString,setTestString} = useProperties()
-    const {objectId} = useContext(SelectedObjectContext)
+    const {objectId, setAutoSave} = useContext(SelectedObjectContext)
 
     const [isAltPressed, setIsAltPressed] = useState(false);
     const handleKeyDown = (event) => {
@@ -31,7 +32,7 @@ function Editor() {
         }
       };
 
-      const handleDrag = (e) =>{          
+      const handleDrag = (e) =>{        
           const updatedProperties = [...properties];
           updatedProperties[objectId].location.x = e.elements[12]
           updatedProperties[objectId].location.y = e.elements[13]
@@ -56,7 +57,7 @@ function Editor() {
           updatedProperties[objectId].scale.y = scaleY;
           updatedProperties[objectId].scale.z = scaleZ;
 
-          // Call setProperties to update the state with the modified array
+          // Call setProperties to update the state with the modified transforms
           setProperties(updatedProperties);
 
       }
@@ -64,10 +65,14 @@ function Editor() {
       window.addEventListener('keydown', handleKeyDown);
       window.addEventListener('keyup', handleKeyUp);
 
-      // Set properties dynamically
+        // Set properties dynamically and create a component with custom properties to be rendered in the 3d scene
         const combinedComponents = gameObjects.map((gameObject, index) => {
-          // Merge props from properties array
+          // Assign properties to the component and return a new combined component 
+
+          // make a copy of properties for the object at index
           const combinedProps = properties[index]
+
+          // assign new values to the copied variable
           let assetType = combinedProps.type;
           let prop = {
             key: combinedProps.id,
@@ -85,41 +90,29 @@ function Editor() {
             }else{
               prop.src = combinedProps.url;
             }
+          }else if(assetType==="portal"){
+            prop.exit = [10,10,10]
+            prop.position = [0,0,0]
+            prop.rotation = [0,0,0]
+            prop.args = [1,1,1]
           }
           // Create a new component with merged props
           const combinedComponent = React.cloneElement(gameObject, prop);
-          if(assetType==="glb"){
-              return (
-                <PivotControls
-                depthTest={false}
-                disableRotations={objectId!==index}
-                disableSliders={objectId!==index}
-                disableAxes={objectId!==index}
-                onDrag={(e)=>{handleDrag(e)}}
-                scale={100}
-                fixed
-                lineWidth={4}
-                key={index}>
-                  <RigidBody gravityScale={0} colliders={'hull'}>
-                    {combinedComponent}
-                  </RigidBody>
-                </PivotControls>) 
+            return (
+              <PivotControls
+                  depthTest={false}
+                  disableRotations={objectId!==index}
+                  disableSliders={objectId!==index}
+                  disableAxes={objectId!==index}
+                  onDrag={(e)=>{handleDrag(e)}}
+                  onDragEnd={setAutoSave(true)}
+                  scale={100}
+                  fixed
+                  lineWidth={4}
+                  key={index}>
+                {combinedComponent}
+            </PivotControls>)
             
-        }else{
-          return (
-            <PivotControls
-                depthTest={false}
-                disableRotations={objectId!==index}
-                disableSliders={objectId!==index}
-                disableAxes={objectId!==index}
-                onDrag={(e)=>{handleDrag(e)}}
-                scale={100}
-                fixed
-                lineWidth={4}
-                key={index}>
-              {combinedComponent}
-          </PivotControls>)
-        }
         });
 
   return (
@@ -128,7 +121,7 @@ function Editor() {
             <CameraControls makeDefault/>
             <ambientLight intensity={Math.PI / 2} />
             <Ground />
-            <Physics>
+            <Physics debug>
               {combinedComponents}
             </Physics>
               {/* <Splat src='https://huggingface.co/datasets/sujayA7299/Splat-data/resolve/main/empty.splat'/> */}

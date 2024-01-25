@@ -96,9 +96,14 @@ export const createNewProperties = (poiTypeLocal, properties) => {
       
       additionalProperties = {
         type:"splat",
-        url: 'a',
+        locale:"English",
+        url: '',
       };
-    } 
+    }else if(poiTypeLocal==="10"){
+      additionalProperties = {
+        type:"portal"
+      }
+    }
     
   
     const newProperties = { ...baseProperties, ...additionalProperties };

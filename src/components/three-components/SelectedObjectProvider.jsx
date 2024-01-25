@@ -15,6 +15,8 @@ const SelectedObjectProvider = ({ children }) => {
 
   const [mapData, setMapData] = useState()
 
+  const [autoSave, setAutoSave] = useState(false)
+
 
   // -------------Map API -------------//
   const fetchDataFromMap = async () => {
@@ -210,7 +212,7 @@ const fetchDataFromAssets = async (mapId, poiId) =>{
     selectedObject,setSelectedObject,
     mapData,setMapData,
     firstRender,
-    previousPoiIDs, setPreviousPoiIDs,
+    previousPoiIDs, setPreviousPoiIDs,autoSave, setAutoSave,
   };
 
   return <SelectedObjectContext.Provider value={contextValue}>{children}</SelectedObjectContext.Provider>;
