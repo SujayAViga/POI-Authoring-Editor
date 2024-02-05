@@ -16,8 +16,8 @@ function Editor() {
 
     const { gameObjects, setGameObjects } = useGameObjects();
     const {properties,setProperties,testString,setTestString} = useProperties()
-    const {objectId, setAutoSave} = useContext(SelectedObjectContext)
-
+    const {objectId, setAutoSave,test} = useContext(SelectedObjectContext)
+    
     const [isAltPressed, setIsAltPressed] = useState(false);
     const handleKeyDown = (event) => {
         if (event.key === 'Alt') {
@@ -105,7 +105,8 @@ function Editor() {
                   disableSliders={objectId!==index}
                   disableAxes={objectId!==index}
                   onDrag={(e)=>{handleDrag(e)}}
-                  onDragEnd={setAutoSave(true)}
+                  onDragEnd={test}
+                  autoTransform
                   scale={100}
                   fixed
                   lineWidth={4}

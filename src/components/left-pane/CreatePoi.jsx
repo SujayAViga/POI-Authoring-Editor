@@ -54,8 +54,11 @@ function CreatePoi({onClose,setPoiName,setPoiType}) {
     let newGameObject,newProperty;
     const createGameobject = () =>{
         if(poiTypeLocal==='9'){
+          // set object id
             setObjectId(gameObjects.length)
+            // create new react component
             newGameObject = <Splat src={splatUrls} key={gameObjects.length} objectId={gameObjects.length+1}/>; // You can use a key to ensure uniqueness
+            // set initial properties
             setNewPoiData({
               mapId: mapId,
               type: 9, 
@@ -94,6 +97,31 @@ function CreatePoi({onClose,setPoiName,setPoiType}) {
       }else if(poiTypeLocal==='10'){
         setObjectId(gameObjects.length)
         newGameObject = <Portal />
+        setNewPoiData({
+          mapId: mapId,
+          type:10, 
+          location: {
+            x: 0,
+            y: 0,
+            z: 0
+          },
+          rotation: {
+            x: 0,
+            y: 0,
+            z: 0,
+            w: 35.56
+          },
+          scale: {
+            x: 0,
+            y: 0,
+            z: 0,
+          },
+          tags: [
+            "123",
+            "tag1",
+            "tag2"
+          ]
+        })
       }
         
         // Update the gameObjects array with the newSplat

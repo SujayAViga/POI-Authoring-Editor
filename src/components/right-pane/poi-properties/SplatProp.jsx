@@ -5,21 +5,24 @@ import { SelectedObjectContext } from '../../three-components/SelectedObjectProv
 import { useProperties } from '../../three-components/PropertiesProvider';
 
 function SplatProp() {
-  const { objectId,setAutoSave,autoSave,authToken,api,mapId,createNewPoiData,poiData,setPoiData,mapData,updatePoiData,fetchPoiData,fetchDataFromAssets,addDataToAsset,updateAssetData} = useContext(SelectedObjectContext);
+  const {test,objectId,autoSave,authToken,api,mapId,createNewPoiData,poiData,setPoiData,mapData,updatePoiData,fetchPoiData,fetchDataFromAssets,addDataToAsset,updateAssetData} = useContext(SelectedObjectContext);
+  const {properties,setProperties} = useProperties();
+
   const [splatLocalUrl, setSplatLocalUrl] = useState('');
-  const {properties,setProperties} = useProperties()
+  const [localLang, setLocalLang] = useState('')
+  
   const [assetData, setAssetData] = useState()
   const [updatedPoiData, setUpdatedPoiData] = useState(null)
   const assetCreated = useRef(false)
 
   useEffect(()=>{
-    console.log("cyr",properties[objectId]);
+    setSplatLocalUrl(properties[objectId].url)
   },[])
 
+  //  update POI data to post to /poi and
+  //  asset data to post to /asset
   useEffect(()=>{
     
-    setSplatLocalUrl(properties[objectId].url)
-
     setUpdatedPoiData(
       {
         mapId: mapId,
@@ -50,7 +53,7 @@ function SplatProp() {
         mapId: mapId,
         POIId: properties[objectId].poiId,
         language: properties[objectId].locale,
-        URL: properties[objectId].url,
+        URL: splatLocalUrl,
       })
     }else{
       setAssetData({
@@ -60,7 +63,28 @@ function SplatProp() {
       })
     }
     
-  },[properties])
+  },[properties,splatLocalUrl])
+
+  const postData = ()=>{
+    if(assetData && !properties[objectId].assetCreated){
+      if(authToken){
+        addDataToAsset(assetData).then(()=>{
+          properties[objectId].assetCreated = true
+        })
+      }
+      
+    }else if(assetData && properties[objectId].assetCreated){
+      if(updatedPoiData){
+        updatePoiData(updatedPoiData).then(()=>{
+          updateAssetData(assetData).then(()=>{
+            fetchPoiData(mapId).then(()=>{
+              fetchDataFromAssets(mapId,properties[objectId].poiId)
+            })
+          })
+        })
+      }
+    }
+  }
 
   useEffect(()=>{
     // create asset if not else update the existing asset
@@ -72,8 +96,7 @@ function SplatProp() {
       }
       
     }else if(assetData && properties[objectId].assetCreated){
-      console.log(autoSave);
-      if(updatedPoiData && autoSave){
+      if(updatedPoiData){
         updatePoiData(updatedPoiData).then(()=>{
           updateAssetData(assetData).then(()=>{
             fetchPoiData(mapId).then(()=>{
@@ -82,18 +105,19 @@ function SplatProp() {
           })
         })
       }
-      setAutoSave(false)
     }
     
-  })
+  },[autoSave])
 
-  const handleSplatUpdate = () =>{
+  const handleUpdate = () =>{
     // store previous values of "properties" array
     const updatedProperties = [...properties];
     // update url 
     updatedProperties[objectId].url = splatLocalUrl;
     // set the updated properties as properties
     setProperties(updatedProperties);
+    // test()
+    // postData()
   }
 
 
@@ -107,9 +131,9 @@ function SplatProp() {
       <Transforms transforms = {properties[objectId]}/>
       <div className='property-container'>
         <h4>Splat Property</h4>
-        <input placeholder="Locale" value={properties[objectId].locale} onChange={console.log()}/>
+        <input placeholder="Locale" value={localLang} onChange={(e)=>setLocalLang(e.target.value)}/>
         <input placeholder='Splat url' value={splatLocalUrl} onChange={handleUrlChange}/>
-        <Button onClick={handleSplatUpdate}>Update</Button>
+        <Button onClick={handleUpdate}>Update</Button>
       </div>
     </>
   )

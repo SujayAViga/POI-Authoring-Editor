@@ -7,21 +7,17 @@ import { useProperties } from '../three-components/PropertiesProvider';
 const Poi = ({ poiName,poiType,objectId,locale }) => {
   const { setSelectedObject,setObjectId,fetchPoiData,mapId,poiData } = useContext(SelectedObjectContext);
   const {properties} = useProperties()
-  const {gameObjects} = useGameObjects()
 
   // fetch map 
   useEffect(()=>{
     fetchPoiData(mapId).then(()=>{
-      console.log(poiData);
       properties[objectId-1].poiId = poiData[objectId-1].POIId
     })
   },[])
 
   const handleObjectSelection = () => {
     setSelectedObject({poiType,poiName,locale});
-    setObjectId(objectId-1)
-    console.log(objectId-1);
-    
+    setObjectId(objectId-1)    
   };
 
   const poitype = {

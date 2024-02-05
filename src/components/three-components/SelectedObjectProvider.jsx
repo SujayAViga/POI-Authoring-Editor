@@ -1,9 +1,12 @@
 import axios from 'axios';
 import { createContext, useRef, useState } from 'react';
+import { useProperties } from './PropertiesProvider';
 
 const SelectedObjectContext = createContext();
 
 const SelectedObjectProvider = ({ children }) => {
+  const {properties,setProperties} = useProperties()
+
   const [selectedObject, setSelectedObject] = useState(null);
   const [objectId, setObjectId] = useState(0)
   const [locale, setLocale] = useState()
@@ -15,8 +18,12 @@ const SelectedObjectProvider = ({ children }) => {
 
   const [mapData, setMapData] = useState()
 
-  const [autoSave, setAutoSave] = useState(false)
+  const [autoSave, setAutoSave] = useState(0)
 
+  const test = () =>{
+    setAutoSave(autoSave+1)
+    console.log(autoSave);
+  }
 
   // -------------Map API -------------//
   const fetchDataFromMap = async () => {
@@ -202,6 +209,7 @@ const fetchDataFromAssets = async (mapId, poiId) =>{
   })
 
   const contextValue = {
+    test,
     poiData,setPoiData,
     fetchDataFromMap,deletePoiData,createNewPoiData,fetchPoiData,updatePoiData,addDataToAsset,updateAssetData,fetchDataFromAssets,
     mapId,setMapId,
