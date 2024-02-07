@@ -5,7 +5,7 @@ import { SelectedObjectContext } from '../../three-components/SelectedObjectProv
 import { useProperties } from '../../three-components/PropertiesProvider';
 
 function SplatProp() {
-  const {test,objectId,autoSave,authToken,api,mapId,createNewPoiData,poiData,setPoiData,mapData,updatePoiData,fetchPoiData,fetchDataFromAssets,addDataToAsset,updateAssetData} = useContext(SelectedObjectContext);
+  const {autoSaveData,objectId,autoSave,authToken,api,mapId,createNewPoiData,poiData,setPoiData,mapData,updatePoiData,fetchPoiData,fetchDataFromAssets,addDataToAsset,updateAssetData} = useContext(SelectedObjectContext);
   const {properties,setProperties} = useProperties();
 
   const [splatLocalUrl, setSplatLocalUrl] = useState('');
@@ -37,7 +37,7 @@ function SplatProp() {
           x: properties[objectId].rotation.x,
           y: properties[objectId].rotation.y,
           z: properties[objectId].rotation.z,
-          w: 35.56
+          w: properties[objectId].rotation.w
         },
         scale: {
           x: properties[objectId].scale.x,
@@ -62,31 +62,12 @@ function SplatProp() {
         language: properties[objectId].locale,
       })
     }
-    
+    console.log(properties[objectId].assetCreated);
   },[properties,splatLocalUrl])
 
-  const postData = ()=>{
-    if(assetData && !properties[objectId].assetCreated){
-      if(authToken){
-        addDataToAsset(assetData).then(()=>{
-          properties[objectId].assetCreated = true
-        })
-      }
-      
-    }else if(assetData && properties[objectId].assetCreated){
-      if(updatedPoiData){
-        updatePoiData(updatedPoiData).then(()=>{
-          updateAssetData(assetData).then(()=>{
-            fetchPoiData(mapId).then(()=>{
-              fetchDataFromAssets(mapId,properties[objectId].poiId)
-            })
-          })
-        })
-      }
-    }
-  }
 
   useEffect(()=>{
+    console.log(objectId);
     // create asset if not else update the existing asset
     if(assetData && !properties[objectId].assetCreated){
       if(authToken){
@@ -116,8 +97,7 @@ function SplatProp() {
     updatedProperties[objectId].url = splatLocalUrl;
     // set the updated properties as properties
     setProperties(updatedProperties);
-    // test()
-    // postData()
+    autoSaveData()
   }
 
 

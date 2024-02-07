@@ -20,7 +20,7 @@ const SelectedObjectProvider = ({ children }) => {
 
   const [autoSave, setAutoSave] = useState(0)
 
-  const test = () =>{
+  const autoSaveData = () =>{
     setAutoSave(autoSave+1)
     console.log(autoSave);
   }
@@ -154,7 +154,7 @@ const addDataToAsset = async (assetData) => {
         },
       }
     );
-    console.log("Asset created!! ", response.status);
+    console.log("Asset created!! ", response.data);
   } catch (error) {
     console.error('Failed to post data to /asset/', error.message);
   }
@@ -209,7 +209,7 @@ const fetchDataFromAssets = async (mapId, poiId) =>{
   })
 
   const contextValue = {
-    test,
+    autoSaveData,
     poiData,setPoiData,
     fetchDataFromMap,deletePoiData,createNewPoiData,fetchPoiData,updatePoiData,addDataToAsset,updateAssetData,fetchDataFromAssets,
     mapId,setMapId,

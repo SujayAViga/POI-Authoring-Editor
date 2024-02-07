@@ -13,6 +13,7 @@ export const createNewProperties = (poiTypeLocal, properties) => {
         x: 0,
         y: 0,
         z: 0,
+        w: 0
       },
       scale:{
         x: 1,
@@ -97,7 +98,7 @@ export const createNewProperties = (poiTypeLocal, properties) => {
       additionalProperties = {
         type:"splat",
         locale:"English",
-        url: 'a',
+        url: '',
       };
     }else if(poiTypeLocal==="10"){
       additionalProperties = {

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
-import { CameraControls, Gltf, Splat, TransformControls } from '@react-three/drei'
+import { CameraControls, GizmoHelper, GizmoViewcube, GizmoViewport, Gltf, Splat, TransformControls } from '@react-three/drei'
 import { PivotControls } from '../../assets/pivotControls';
 import Ground from './Ground';
 import './Editor.css'
@@ -11,12 +11,13 @@ import Cesium from '../poi-assets/Cesium';
 import { Physics, RigidBody } from '@react-three/rapier';
 import { radToDeg } from 'three/src/math/MathUtils';
 import Portal from '../poi-assets/Portal';
+import { Quaternion, Vector3 } from 'three';
 
 function Editor() {    
 
     const { gameObjects, setGameObjects } = useGameObjects();
     const {properties,setProperties,testString,setTestString} = useProperties()
-    const {objectId, setAutoSave,test} = useContext(SelectedObjectContext)
+    const {objectId, setAutoSave,autoSaveData} = useContext(SelectedObjectContext)
     
     const [isAltPressed, setIsAltPressed] = useState(false);
     const handleKeyDown = (event) => {
@@ -34,28 +35,25 @@ function Editor() {
 
       const handleDrag = (e) =>{        
           const updatedProperties = [...properties];
-          updatedProperties[objectId].location.x = e.elements[12]
-          updatedProperties[objectId].location.y = e.elements[13]
-          updatedProperties[objectId].location.z = e.elements[14]
 
-          // Extracting the rotation values from the transformation matrix
-          const thetaX = radToDeg(Math.atan2(e.elements[9], e.elements[10]));
-          const thetaY = radToDeg(Math.atan2(-e.elements[8], Math.sqrt(e.elements[9] ** 2 + e.elements[10] ** 2)));
-          const thetaZ = radToDeg(Math.atan2(e.elements[4], e.elements[0]));
+          const loc = new Vector3().setFromMatrixPosition(e)
+          const rot = new Quaternion().setFromRotationMatrix(e)
+          const sc = new Vector3().setFromMatrixScale(e)
+          
 
+          updatedProperties[objectId].location.x = loc.x
+          updatedProperties[objectId].location.y = loc.y
+          updatedProperties[objectId].location.z = loc.z
+          
           // Assigning the rotation values to the state
-          updatedProperties[objectId].rotation.x = thetaX;
-          updatedProperties[objectId].rotation.y = thetaY;
-          updatedProperties[objectId].rotation.z = thetaZ;
+          updatedProperties[objectId].rotation.x = rot.x;
+          updatedProperties[objectId].rotation.y = rot.y;
+          updatedProperties[objectId].rotation.z = rot.z;
+          updatedProperties[objectId].rotation.w = rot.w;
 
-          // Extracting the scaling values from the transformation matrix
-          const scaleX = Math.sqrt(e.elements[0] ** 2 + e.elements[4] ** 2 + e.elements[8] ** 2);
-          const scaleY = Math.sqrt(e.elements[1] ** 2 + e.elements[5] ** 2 + e.elements[9] ** 2);
-          const scaleZ = Math.sqrt(e.elements[2] ** 2 + e.elements[6] ** 2 + e.elements[10] ** 2);
-
-          updatedProperties[objectId].scale.x = scaleX;
-          updatedProperties[objectId].scale.y = scaleY;
-          updatedProperties[objectId].scale.z = scaleZ;
+          updatedProperties[objectId].scale.x = sc.x;
+          updatedProperties[objectId].scale.y = sc.y;
+          updatedProperties[objectId].scale.z = sc.z;
 
           // Call setProperties to update the state with the modified transforms
           setProperties(updatedProperties);
@@ -105,8 +103,8 @@ function Editor() {
                   disableSliders={objectId!==index}
                   disableAxes={objectId!==index}
                   onDrag={(e)=>{handleDrag(e)}}
-                  onDragEnd={test}
-                  autoTransform
+                  onDragEnd={autoSaveData}
+                  // autoTransform
                   scale={100}
                   fixed
                   lineWidth={4}
@@ -118,10 +116,16 @@ function Editor() {
 
   return (
     <>
-        <Canvas camera={{ position: [15, 5, 20], fov: 50 }} dpr={[1, 2]}>
+        <Canvas camera={{ position: [15,15,15], fov: 50 }} dpr={[1, 2]}>
             <CameraControls makeDefault/>
             <ambientLight intensity={Math.PI / 2} />
             <Ground />
+            
+            <GizmoHelper alignment="top-right" margin={[80, 80]} >
+                <GizmoViewport axisColors={['#eb4d4b', '#6ab04c', '#2e86de']} labelColor="black" />
+                {/* <GizmoViewcube/> */}
+            </GizmoHelper>
+
             <Physics debug>
               {combinedComponents}
             </Physics>

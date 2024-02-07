@@ -5,7 +5,7 @@ import { SelectedObjectContext } from '../../three-components/SelectedObjectProv
 import { Button } from 'react-bootstrap';
 
 function PortalProp() {
-  const {test,autosave,objectId,authToken,api,mapId,createNewPoiData,poiData,setPoiData,mapData,updatePoiData,fetchPoiData,fetchDataFromAssets,addDataToAsset,updateAssetData} = useContext(SelectedObjectContext);
+  const {autoSaveData,autoSave,objectId,authToken,api,mapId,createNewPoiData,poiData,setPoiData,mapData,updatePoiData,fetchPoiData,fetchDataFromAssets,addDataToAsset,updateAssetData} = useContext(SelectedObjectContext);
   const {properties,setProperties} = useProperties()
 
   // to be edited
@@ -40,7 +40,7 @@ function PortalProp() {
           x: properties[objectId].rotation.x,
           y: properties[objectId].rotation.y,
           z: properties[objectId].rotation.z,
-          w: 35.56
+          w: properties[objectId].rotation.w
         },
         scale: {
           x: properties[objectId].scale.x,
@@ -62,30 +62,7 @@ function PortalProp() {
     })
   },[properties,exitX,exitY,exitZ])
 
-  // const postData = ()=>{
-  //   // create asset if not else update the existing asset
-  //   if(assetData && !properties[objectId].assetCreated){
-  //     if(authToken){
-  //       addDataToAsset(assetData).then(()=>{
-  //         properties[objectId].assetCreated = true
-  //       })
-  //     }
-      
-  //   }else if(assetData && properties[objectId].assetCreated){
-  //     if(updatedPoiData){
-  //       updatePoiData(updatedPoiData).then(()=>{
-  //         updateAssetData(assetData).then(()=>{
-  //           fetchPoiData(mapId).then(()=>{
-  //             fetchDataFromAssets(mapId,properties[objectId].poiId)
-  //           })
-  //         })
-  //       })
-  //     }
-  //   }
-  // }
-
   useEffect(()=>{
-    console.log("aa");
     // create asset if not else update the existing asset
     if(assetData && !properties[objectId].assetCreated){
       if(authToken){
@@ -106,7 +83,7 @@ function PortalProp() {
       }
     }
     
-  },[autosave])
+  },[autoSave])
 
   const handleUpdate = () =>{
     // store previous values of "properties" array
@@ -118,7 +95,7 @@ function PortalProp() {
 
     // set the updated properties as properties
     setProperties(updatedProperties);
-    // test()
+    autoSaveData()
     // postData()
   }
 
