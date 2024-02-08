@@ -3,6 +3,7 @@ import Transforms from '../Transforms'
 import { useProperties } from '../../three-components/PropertiesProvider'
 import { SelectedObjectContext } from '../../three-components/SelectedObjectProvider';
 import { Button } from 'react-bootstrap';
+import './Properties.css'
 
 function PortalProp() {
   const {autoSaveData,autoSave,objectId,authToken,api,mapId,createNewPoiData,poiData,setPoiData,mapData,updatePoiData,fetchPoiData,fetchDataFromAssets,addDataToAsset,updateAssetData} = useContext(SelectedObjectContext);
@@ -60,16 +61,17 @@ function PortalProp() {
         z: exitZ
       },
     })
-  },[properties,exitX,exitY,exitZ])
+  },[properties,exitX,exitY,exitZ,objectId])
 
   useEffect(()=>{
     // create asset if not else update the existing asset
-    if(assetData && !properties[objectId].assetCreated){
+    if(assetData && properties[objectId].poiId && !properties[objectId].assetCreated){
       if(authToken){
+        console.log(assetData);
         addDataToAsset(assetData)
       }
       
-    }else if(assetData && properties[objectId].assetCreated){
+    }else if(assetData && properties[objectId].poiId && !properties[objectId].assetCreated){
       if(updatedPoiData){
         updatePoiData(updatedPoiData).then(()=>{
           updateAssetData(assetData).then(()=>{
@@ -94,7 +96,6 @@ function PortalProp() {
     // set the updated properties as properties
     setProperties(updatedProperties);
     autoSaveData()
-    // postData()
   }
 
   return (
@@ -106,7 +107,7 @@ function PortalProp() {
       <input type='number' value={exitX} style={{width:'30%',textAlign:'center', marginLeft:'2%'}} onChange={(e)=>{setExitX(e.target.value)}} placeholder='X'/>
       <input type='number' value={exitY} style={{width:'30%',textAlign:'center', marginLeft:'2%'}} onChange={(e)=>{setExitY(e.target.value)}} placeholder='Y'/>
       <input type='number' value={exitZ} style={{width:'30%',textAlign:'center', marginLeft:'2%'}} onChange={(e)=>{setExitZ(e.target.value)}} placeholder='Z'/>
-      <Button onClick={handleUpdate}>Update</Button>
+      <button className="button" onClick={handleUpdate}>Update</button>
     </div>
   </>
   )

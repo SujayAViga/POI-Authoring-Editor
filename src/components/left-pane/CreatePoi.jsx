@@ -57,7 +57,7 @@ function CreatePoi({onClose,setPoiName,setPoiType}) {
           // set object id
             setObjectId(gameObjects.length)
             // create new react component
-            newGameObject = <Splat src={splatUrls} key={gameObjects.length} objectId={gameObjects.length+1}/>; // You can use a key to ensure uniqueness
+            newGameObject = <Splat key={gameObjects.length} objectId={gameObjects.length+1}/>; // You can use a key to ensure uniqueness
             // set initial properties
             setNewPoiData({
               mapId: mapId,
@@ -71,12 +71,12 @@ function CreatePoi({onClose,setPoiName,setPoiType}) {
                 x: 0,
                 y: 0,
                 z: 0,
-                w: 35.56
+                w: 0
               },
               scale: {
-                x: 0,
-                y: 0,
-                z: 0,
+                x: 1,
+                y: 1,
+                z: 1,
               },
               tags: [
                 "123",
@@ -90,39 +90,67 @@ function CreatePoi({onClose,setPoiName,setPoiType}) {
             newGameObject = <Cesium
             position={[0,0,0]}
             />
-
-        }else if(poiTypeLocal=='3'){
+        }
+        
+        else if(poiTypeLocal=='3'){
           setObjectId(gameObjects.length)
           newGameObject = <Gltf />
-      }else if(poiTypeLocal==='10'){
-        setObjectId(gameObjects.length)
-        newGameObject = <Portal />
-        setNewPoiData({
-          mapId: mapId,
-          type:10, 
-          location: {
-            x: 0,
-            y: 0,
-            z: 0
-          },
-          rotation: {
-            x: 0,
-            y: 0,
-            z: 0,
-            w: 35.56
-          },
-          scale: {
-            x: 0,
-            y: 0,
-            z: 0,
-          },
-          tags: [
-            "123",
-            "tag1",
-            "tag2"
-          ]
-        })
-      }
+          setNewPoiData({
+            mapId: mapId,
+            type: 3, 
+            location: {
+              x: 0,
+              y: 0,
+              z: 0
+            },
+            rotation: {
+              x: 0,
+              y: 0,
+              z: 0,
+              w: 0
+            },
+            scale: {
+              x: 1,
+              y: 1,
+              z: 1,
+            },
+            tags: [
+              "123",
+              "tag1",
+              "tag2"
+            ]
+          })
+        }
+      
+        else if(poiTypeLocal==='10'){
+          setObjectId(gameObjects.length)
+          newGameObject = <Portal />
+          setNewPoiData({
+            mapId: mapId,
+            type:10, 
+            location: {
+              x: 0,
+              y: 0,
+              z: 0
+            },
+            rotation: {
+              x: 0,
+              y: 0,
+              z: 0,
+              w: 0
+            },
+            scale: {
+              x: 1,
+              y: 1,
+              z: 1,
+            },
+            tags: [
+              "123",
+              "tag1",
+              "tag2"
+            ]
+          })
+        }
         
         // Update the gameObjects array with the newSplat
         // setProperties((prevProperties)=>[...prevProperties],newProperty)
@@ -140,7 +168,7 @@ function CreatePoi({onClose,setPoiName,setPoiType}) {
             <Form.Select size='lg' style={{ width: "100%", height: "2em", padding: "1%", margin: '1%', fontSize: 16,borderRadius:5 }} onChange={(e)=>{setPoiType(e.target.value); setPoiTypeLocal(e.target.value)}}>
                 <option>POI type</option>
                 {/* <option value="1">Point Cloud</option> */}
-                <option value="2">Cesium</option>
+                {/* <option value="2">Cesium</option> */}
                 <option value="3">glb/Gltf</option>
                 {/* <option value="4">Animated GLB</option>
                 <option value="5">Image</option>
@@ -150,7 +178,7 @@ function CreatePoi({onClose,setPoiName,setPoiType}) {
                 <option value="9">Splat</option>
                 <option value="10">Portal</option>
             </Form.Select>
-            <button onClick={handleAddPoi} type='submit'>Create</button>
+            <button className='button' onClick={handleAddPoi} type='submit'>Create</button>
         </div>
         </div>
     );

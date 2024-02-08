@@ -17,6 +17,7 @@ const Poi = ({ poiName,poiType,objectId,locale }) => {
 
   const handleObjectSelection = () => {
     setSelectedObject({poiType,poiName,locale});
+    console.log(properties[objectId-1].poiId);
     setObjectId(objectId-1)    
   };
 
@@ -34,7 +35,7 @@ const Poi = ({ poiName,poiType,objectId,locale }) => {
   }
     return (
       <div className='property-container'>
-        <button onClick={handleObjectSelection}>{poiName}({poitype[poiType]})</button>
+        <button className='button' onClick={handleObjectSelection}>{poiName}({poitype[poiType]})</button>
       </div>
     );
   };

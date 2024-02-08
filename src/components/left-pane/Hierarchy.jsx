@@ -44,7 +44,7 @@ function Hierarchy() {
     <div className='hierarchy-container' >
       <UserDetails/>
       <div className='gameobject-container'>
-        <button onClick={handleOpenCreateMapModal}>Create Map</button>
+        <button className='button' onClick={handleOpenCreateMapModal}>Create Map</button>
 
         {isCreateMapModalOpen &&
            <CreateMap 

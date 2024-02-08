@@ -3,131 +3,106 @@ import Transforms from '../Transforms'
 import { useProperties } from '../../three-components/PropertiesProvider';
 import { SelectedObjectContext } from '../../three-components/SelectedObjectProvider';
 import { Button } from 'react-bootstrap';
+import './Properties.css'
 
 function StaticGlbProp() {
-  const { objectId,authToken,api,mapId} = useContext(SelectedObjectContext);
+  const {autoSaveData,autoSave,objectId,authToken,api,mapId,createNewPoiData,poiData,setPoiData,mapData,updatePoiData,fetchPoiData,fetchDataFromAssets,addDataToAsset,updateAssetData} = useContext(SelectedObjectContext);
   const {properties,setProperties} = useProperties()
   const [localUrl, setLocalUrl] = useState('')
   const [assetData, setAssetData] = useState()
+  const [updatedPoiData, setUpdatedPoiData] = useState(null)
 
   // https://huggingface.co/datasets/sujayA7299/Splat-data/resolve/main/collider.glb
 
   useEffect(()=>{
     setLocalUrl(properties[objectId].url)
-    setAssetData({
-      mapId: mapId,
-      POIId: "DxWIjFstbndT0ikkaxb5",
-      language: "english",
-      URL: properties[objectId].url,
-      text: "this is an example text",
-      exitPortalPosition: {
-        x: properties[objectId].location.x,
-        y: properties[objectId].location.y,
-        z: properties[objectId].location.z
-      },
-      exitPortalRotation: {
-        x: properties[objectId].rotation.x,
-        y: properties[objectId].rotation.y,
-        z: properties[objectId].rotation.z,
-        w: 0.4
-      },
-      exitPortalScale: {
-        x: 1.5,
-        y: 1.5,
-        z: 1.5
-      },
-      exitPortalText: "string",
-      splatBoundaryCenter: {
-        x: 0,
-        y: 0,
-        z: 0
-      },
-      splatBoundaryRadius: 0,
-      splatBoundaryWidth: 0,
-      splatBoundaryHeight: 0,
-      splatBoundaryLength: 0
-    })
-    console.log(assetData);
-  },[properties])
+  },[])
+
+
+  //  update POI data to post to /poi and
+  //  asset data to post to /asset
+  useEffect(()=>{    
+    setUpdatedPoiData(
+      {
+        mapId: mapId,
+        POIId: properties[objectId].poiId,
+        type: "3",
+        location: {
+          x: properties[objectId].location.x,
+          y: properties[objectId].location.y,
+          z: properties[objectId].location.z
+        },
+        rotation: {
+          x: properties[objectId].rotation.x,
+          y: properties[objectId].rotation.y,
+          z: properties[objectId].rotation.z,
+          w: properties[objectId].rotation.w
+        },
+        scale: {
+          x: properties[objectId].scale.x,
+          y: properties[objectId].scale.y,
+          z: properties[objectId].scale.z,
+        },
+      }
+    )
+    
+    
+    if(properties[objectId].url){
+      setAssetData({
+        mapId: mapId,
+        POIId: properties[objectId].poiId,
+        language: properties[objectId].locale,
+        URL: localUrl,
+      })
+    }else{
+      setAssetData({
+        mapId: mapId,
+        POIId: properties[objectId].poiId,
+        language: properties[objectId].locale,
+      })
+    }
+    console.log(properties[objectId].assetCreated);
+  },[properties,localUrl])
   
+ 
+
+  
+  useEffect(()=>{
+    // create asset if not else update the existing asset
+    if(assetData && properties[objectId].poiId && !properties[objectId].assetCreated){
+      if(authToken){
+        console.log(assetData);
+        addDataToAsset(assetData)
+      }
+      
+    }else if(assetData && properties[objectId].assetCreated){
+      if(updatedPoiData){
+        updatePoiData(updatedPoiData).then(()=>{
+          updateAssetData(assetData).then(()=>{
+            fetchPoiData(mapId).then(()=>{
+              fetchDataFromAssets(mapId,properties[objectId].poiId)
+            })
+          })
+        })
+      }
+    }
+    
+  },[autoSave])
+  
+  const handleUpdate = () =>{
+    // store previous values of "properties" array
+    const updatedProperties = [...properties];
+    // update url
+    updatedProperties[objectId].url = localUrl;
+
+    // set the updated properties as properties
+    setProperties(updatedProperties);
+    autoSaveData()
+  }
+
   const handleUrlChange = (e) =>{
     setLocalUrl(e.target.value)
   }
-  
-  const handleUpdate = (e) =>{
-    // store previous values of "properties" array
-    const updatedProperties = [...properties];
-    // update url 
-    updatedProperties[objectId].url = localUrl;
-    // set the updated properties as properties
-    setProperties(updatedProperties);
-    console.log(assetData.URL);
-    if(authToken){
-      updateAssetData().then(()=>{
-        fetchDataFromAssets()
-      })
-      // addDataToAsset()
-    }
-  }
-
-  
-  const fetchDataFromAssets = async () =>{
-    try {
-      const response = await api.post(
-        'asset/get/',
-        {
-          mapId: "Ha7ZvmsazerrizPETEJL",
-          POIId: "DxWIjFstbndT0ikkaxb5"
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        }
-      );
-      // console.log("Assets fetched",response.data);
-      setAssetData(response.data)
-    } catch (error) {
-      console.error('Failed to fetch from /assets/get', error.message);
-    }
-  };
-  
-  
-
-  const addDataToAsset = async () => {
-    try {
-      const response = await api.post(
-        'asset/',
-        assetData,
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        }
-      );
-      console.log("Asset created!! ", response.status);
-    } catch (error) {
-      console.error('Failed to post data to /asset/', error.message);
-    }
-  };
-
-  const updateAssetData =  async () => {
-    try {
-      const response = await api.patch(
-        `asset/`, // Update the url with the specific POI ID
-        assetData,
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-      console.log("Updated asset data successfully", response.status);
-    } catch (error) {
-      console.error('Failed to update data to /asset/', error.message);
-    }
-  };
   
   
   return (
@@ -137,7 +112,7 @@ function StaticGlbProp() {
         <h4>Static Glb Prop</h4>
         
         <input value={localUrl} placeholder='Glb Url' onChange={handleUrlChange}/>
-        <Button onClick={handleUpdate}>Update</Button>
+        <button className="button" onClick={handleUpdate}>Update</button>
       </div>
     </>
   )

@@ -3,6 +3,7 @@ import Transforms from '../Transforms'
 import { Button } from 'react-bootstrap'
 import { SelectedObjectContext } from '../../three-components/SelectedObjectProvider';
 import { useProperties } from '../../three-components/PropertiesProvider';
+import './Properties.css'
 
 function SplatProp() {
   const {autoSaveData,objectId,autoSave,authToken,api,mapId,createNewPoiData,poiData,setPoiData,mapData,updatePoiData,fetchPoiData,fetchDataFromAssets,addDataToAsset,updateAssetData} = useContext(SelectedObjectContext);
@@ -13,7 +14,6 @@ function SplatProp() {
   
   const [assetData, setAssetData] = useState()
   const [updatedPoiData, setUpdatedPoiData] = useState(null)
-  const assetCreated = useRef(false)
 
   useEffect(()=>{
     setSplatLocalUrl(properties[objectId].url)
@@ -69,13 +69,13 @@ function SplatProp() {
   useEffect(()=>{
     console.log(objectId);
     // create asset if not else update the existing asset
-    if(assetData && !properties[objectId].assetCreated){
+    if(assetData && properties[objectId].poiId && !properties[objectId].assetCreated){
       if(authToken){
         console.log(assetData);
         addDataToAsset(assetData)
       }
       
-    }else if(assetData && properties[objectId].assetCreated){
+    }else if(assetData && properties[objectId].poiId && !properties[objectId].assetCreated){
       if(updatedPoiData){
         updatePoiData(updatedPoiData).then(()=>{
           updateAssetData(assetData).then(()=>{
@@ -112,7 +112,7 @@ function SplatProp() {
         <h4>Splat Property</h4>
         <input placeholder="Locale" value={localLang} onChange={(e)=>setLocalLang(e.target.value)}/>
         <input placeholder='Splat url' value={splatLocalUrl} onChange={handleUrlChange}/>
-        <Button onClick={handleUpdate}>Update</Button>
+        <button className="button" onClick={handleUpdate}>Update</button>
       </div>
     </>
   )
