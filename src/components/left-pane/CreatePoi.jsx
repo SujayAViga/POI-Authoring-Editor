@@ -102,7 +102,7 @@ function CreatePoi({onClose,setPoiName,setPoiType}) {
                 <option value="8">Audio</option> */}
                 <option value="9">Splat</option>
             </Form.Select>
-            <button className='button' onClick={handleAddPoi} type='submit'>Create</button>
+            <button onClick={handleAddPoi} type='submit'>Create</button>
         </div>
         </div>
     );
