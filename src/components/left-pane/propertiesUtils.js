@@ -1,6 +1,8 @@
 
 export const createNewProperties = (poiTypeLocal, properties) => {
     const baseProperties = {
+      poiId:'',
+      assetCreated: false,
       id: properties.length,
       location: {
         x: 0,
@@ -11,6 +13,7 @@ export const createNewProperties = (poiTypeLocal, properties) => {
         x: 0,
         y: 0,
         z: 0,
+        w: 0
       },
       scale:{
         x: 1,
@@ -94,9 +97,19 @@ export const createNewProperties = (poiTypeLocal, properties) => {
       
       additionalProperties = {
         type:"splat",
+        locale:"English",
         url: '',
       };
-    } 
+    }else if(poiTypeLocal==="10"){
+      additionalProperties = {
+        type:"portal",
+        exitLocation:{
+          x:0,
+          y:0,
+          z:0
+        }
+      }
+    }
     
   
     const newProperties = { ...baseProperties, ...additionalProperties };

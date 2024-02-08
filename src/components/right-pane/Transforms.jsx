@@ -1,9 +1,7 @@
 import React, { useContext, useEffect } from 'react'
-import Position from './Position'
-import Rotation from './Rotation'
-import Scale from './Scale'
 import { SelectedObjectContext } from '../three-components/SelectedObjectProvider'
 import { useProperties } from '../three-components/PropertiesProvider'
+import './Transforms.css'
 
 function Transforms({transforms}) {
   const {objectId} = useContext(SelectedObjectContext)

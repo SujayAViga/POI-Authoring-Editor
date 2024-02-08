@@ -8,6 +8,7 @@
 }
 
 .user-container{
+  color: white;
   background-color: rgb(46, 46, 46);
   padding: 2%;
   margin: 3%;
@@ -22,8 +23,12 @@
     /* overflow-y: scroll; */
 }
 
-.publish-button {
+.button{
+  background-color: rgb(46, 46, 46);
+}
 
+.publish-button {
+    background-color: rgb(46, 46, 46);
     width: 15em;
     transform: translateX(-0%);
   }

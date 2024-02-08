@@ -1,32 +1,37 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import Transforms from '../Transforms'
-import { useProperties } from '../../three-components/PropertiesProvider';
+import { useProperties } from '../../three-components/PropertiesProvider'
 import { SelectedObjectContext } from '../../three-components/SelectedObjectProvider';
 import { Button } from 'react-bootstrap';
 import './Properties.css'
 
-function StaticGlbProp() {
+function PortalProp() {
   const {autoSaveData,autoSave,objectId,authToken,api,mapId,createNewPoiData,poiData,setPoiData,mapData,updatePoiData,fetchPoiData,fetchDataFromAssets,addDataToAsset,updateAssetData} = useContext(SelectedObjectContext);
   const {properties,setProperties} = useProperties()
-  const [localUrl, setLocalUrl] = useState('')
+
+  // to be edited
   const [assetData, setAssetData] = useState()
   const [updatedPoiData, setUpdatedPoiData] = useState(null)
-
-  // https://huggingface.co/datasets/sujayA7299/Splat-data/resolve/main/collider.glb
+  
+  const [exitX, setExitX] = useState(0)
+  const [exitY, setExitY] = useState(0)
+  const [exitZ, setExitZ] = useState(0)
 
   useEffect(()=>{
-    setLocalUrl(properties[objectId].url)
+    setExitX(properties[objectId].exitLocation.x)
+    setExitY(properties[objectId].exitLocation.y)
+    setExitZ(properties[objectId].exitLocation.z)
   },[])
 
-
-  //  update POI data to post to /poi and
-  //  asset data to post to /asset
-  useEffect(()=>{    
+  useEffect(()=>{
+    // console.log("Updated Properties");
+    
+    // set portal's transform
     setUpdatedPoiData(
       {
         mapId: mapId,
         POIId: properties[objectId].poiId,
-        type: "3",
+        type: "10",
         location: {
           x: properties[objectId].location.x,
           y: properties[objectId].location.y,
@@ -46,27 +51,18 @@ function StaticGlbProp() {
       }
     )
     
-    
-    if(properties[objectId].url){
-      setAssetData({
-        mapId: mapId,
-        POIId: properties[objectId].poiId,
-        language: properties[objectId].locale,
-        URL: localUrl,
-      })
-    }else{
-      setAssetData({
-        mapId: mapId,
-        POIId: properties[objectId].poiId,
-        language: properties[objectId].locale,
-      })
-    }
-    console.log(properties[objectId].assetCreated);
-  },[properties,localUrl])
-  
- 
+    // set exit location
+    setAssetData({
+      mapId: mapId,
+      POIId: properties[objectId].poiId,
+      exitPortalPosition: {
+        x: exitX,
+        y: exitY,
+        z: exitZ
+      },
+    })
+  },[properties,exitX,exitY,exitZ,objectId])
 
-  
   useEffect(()=>{
     // create asset if not else update the existing asset
     if(assetData && properties[objectId].poiId && !properties[objectId].assetCreated){
@@ -75,7 +71,7 @@ function StaticGlbProp() {
         addDataToAsset(assetData)
       }
       
-    }else if(assetData && properties[objectId].assetCreated){
+    }else if(assetData && properties[objectId].poiId && !properties[objectId].assetCreated){
       if(updatedPoiData){
         updatePoiData(updatedPoiData).then(()=>{
           updateAssetData(assetData).then(()=>{
@@ -88,34 +84,33 @@ function StaticGlbProp() {
     }
     
   },[autoSave])
-  
+
   const handleUpdate = () =>{
     // store previous values of "properties" array
     const updatedProperties = [...properties];
     // update url
-    updatedProperties[objectId].url = localUrl;
+    updatedProperties[objectId].exitLocation.x = exitX;
+    updatedProperties[objectId].exitLocation.y = exitY;
+    updatedProperties[objectId].exitLocation.z = exitZ;
 
     // set the updated properties as properties
     setProperties(updatedProperties);
     autoSaveData()
   }
 
-  const handleUrlChange = (e) =>{
-    setLocalUrl(e.target.value)
-  }
-  
-  
   return (
     <>
-      <Transforms transforms={properties[objectId]}/>
-      <div className='property-container'>
-        <h4>Static Glb Prop</h4>
-        
-        <input value={localUrl} placeholder='Glb Url' onChange={handleUrlChange}/>
-        <button className="button" onClick={handleUpdate}>Update</button>
-      </div>
-    </>
+    <Transforms transforms={properties[objectId]}/> 
+    <div className='property-container'>
+      <h4>Portal Prop</h4>
+      <h4>Exit Position</h4>
+      <input type='number' value={exitX} style={{width:'30%',textAlign:'center', marginLeft:'2%'}} onChange={(e)=>{setExitX(e.target.value)}} placeholder='X'/>
+      <input type='number' value={exitY} style={{width:'30%',textAlign:'center', marginLeft:'2%'}} onChange={(e)=>{setExitY(e.target.value)}} placeholder='Y'/>
+      <input type='number' value={exitZ} style={{width:'30%',textAlign:'center', marginLeft:'2%'}} onChange={(e)=>{setExitZ(e.target.value)}} placeholder='Z'/>
+      <button className="button" onClick={handleUpdate}>Update</button>
+    </div>
+  </>
   )
 }
 
-export default StaticGlbProp
+export default PortalProp

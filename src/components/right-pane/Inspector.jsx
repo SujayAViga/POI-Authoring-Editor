@@ -11,6 +11,7 @@ import AudioProp from './poi-properties/AudioProp'
 import ImageProp from './poi-properties/ImageProp'
 import { SelectedObjectContext } from '../three-components/SelectedObjectProvider'
 import axios from 'axios'
+import PortalProp from './poi-properties/PortalProp'
 
 
 
@@ -21,7 +22,19 @@ function Inspector () {
 
   const { selectedObject, authToken,setAuthToken,api } = useContext(SelectedObjectContext);
   
+  useEffect(()=>{
+    
+    if(selectedObject){
+      setName(selectedObject.poiName)
+      setType(selectedObject.poiType)
+      setLang(selectedObject.locale)
+    }
+   
+  },[selectedObject])
 
+  useEffect(()=>{
+    handleLogin();
+  },[])
 
   const handleLogin = async () => {
     try {
@@ -46,15 +59,7 @@ function Inspector () {
   };
   
 
-  useEffect(()=>{
-    handleLogin();
-    if(selectedObject){
-      setName(selectedObject.poiName)
-      setType(selectedObject.poiType)
-      setLang(selectedObject.locale)
-    }
-   
-  })
+
   
   if (!selectedObject) {
     return <div>Select a game object to view properties.</div>;
@@ -64,7 +69,7 @@ function Inspector () {
     case '1':
       return (        
       <div className='inpector-container'>
-        <div>{selectedObject.poiName}</div>
+        <div className='property-container'>{selectedObject.poiName}</div>
         <PointCloudProp key={Name} objectId={Name} />
       </div>)
     
@@ -78,36 +83,42 @@ function Inspector () {
     case '3':
       return (        
       <div className='inpector-container'>
+        <div className='property-container'>{selectedObject.poiName}</div>
         <StaticGlbProp key={Name} objectId={Name} />
       </div>)
     
     case '4':
       return (        
       <div className='inpector-container'>
+        <div className='property-container'>{selectedObject.poiName}</div>
         <AnimatedGltfProp key={Name} objectId={Name} />
       </div>)
 
     case '5':
       return (        
       <div className='inpector-container'>
+        <div className='property-container'>{selectedObject.poiName}</div>
         <ImageProp key={Name} objectId={Name} />
       </div>)
 
     case '6':
       return (        
       <div className='inpector-container'>
+        <div className='property-container'>{selectedObject.poiName}</div>
         <VideosProp key={Name} objectId={Name} />
       </div>)
 
     case '7':
       return (        
       <div className='inpector-container'>
+        <div className='property-container'>{selectedObject.poiName}</div>
         <TextProp key={Name} objectId={Name} />
       </div>)
 
     case '8':
       return (        
       <div className='inpector-container'>
+        <div className='property-container'>{selectedObject.poiName}</div>
         <AudioProp key={Name} objectId={Name} />
       </div>)
 
@@ -116,6 +127,13 @@ function Inspector () {
       <div className='inpector-container'>
         <div className='property-container'>{selectedObject.poiName}</div>
         <SplatProp key={Name} objectId={Name} />
+      </div>)
+      
+    case '10':
+      return (        
+      <div className='inpector-container'>
+        <div className='property-container'>{selectedObject.poiName}</div>
+        <PortalProp key={Name} objectId={Name} />
       </div>)
       
       default:

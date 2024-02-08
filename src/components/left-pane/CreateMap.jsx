@@ -5,38 +5,44 @@ import { SelectedObjectContext } from '../three-components/SelectedObjectProvide
 import { useFrame } from '@react-three/fiber';
 
 function CreateMap({onClose,setMapName}) {
-    const {authToken,api,maps,setMaps} = useContext(SelectedObjectContext);
+    const {authToken,api,fetchDataFromMap} = useContext(SelectedObjectContext);
     const [localMaps, setLocalMaps] = useState(null)
+    const [localMapName, setLocalMapName] = useState()
 
     useEffect(()=>{
-      console.log("maps",localMaps);
-      fetchDataFromMap()
-    },[maps])
+      if(authToken){
+        fetchDataFromMap()
+      }
+      
+    },[authToken])
 
 
     const handleAddMap = () => {
-        onClose(); // Close the modal
-        // console.log('a',a);
-        // fetchDataFromMap()
+        // fetchDataFromMap().then(()=>{
+          onClose()
+        // })
+    };
+
+    const addDataToMap = async () => {
+      try {
+        const response = await api.post(
+          'map/',
+          {
+            mapName:localMapName
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+              'Content-Type': 'application/json', // Add this line
+            },
+          }
+        );
+        console.log("Posted poi data successfully", response.status);
+      } catch (error) {
+        console.error('Failed to post data to /poi/', error.message);
+      }
     };
     
-    const fetchDataFromMap = async () => {
-        try {
-          const response = await api.get('map/', {
-            headers: {
-              Authorization: `Bearer ${authToken}`, 
-            },
-          });
-          // Handle the response here
-          // console.log('Data from /map/:', response.data);
-          setMaps(response.data);
-          // a = response.data
-        } catch (error) {
-          // Handle errors here
-          console.error('Failed to fetch data from /map/:', error.message);
-        }
-      };
-
     return (
         <div className="modal-overlay">
             <div className="modal-content">
@@ -44,8 +50,8 @@ function CreateMap({onClose,setMapName}) {
                 &times;
                 </span>
                 <h2 style={{color:'black'}}>Create Map</h2>
-                <input placeholder='Map Name' onChange={(e)=>{setMapName(e.target.value)}}/>
-                <button onClick={handleAddMap} type='submit'>Create</button>
+                <input placeholder='Map Name' onChange={(e)=>{setMapName(e.target.value);setLocalMapName(e.target.value)}}/>
+                <button className='button' onClick={handleAddMap} type='submit'>Create</button>
             </div>
         </div>
     );

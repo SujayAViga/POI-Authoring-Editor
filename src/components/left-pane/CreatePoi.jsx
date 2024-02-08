@@ -1,5 +1,5 @@
 // CreatePoi.js
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './CreatePoi.css';
 import Form from 'react-bootstrap/Form';
 
@@ -15,70 +15,145 @@ import Cesium from '../poi-assets/Cesium';
 import SplatProp from '../right-pane/poi-properties/SplatProp';
 import CesiumProp from '../right-pane/poi-properties/CesiumProp';
 import { CuboidCollider, RigidBody,Physics } from "@react-three/rapier";
+import StaticGlbProp from '../right-pane/poi-properties/StaticGlbProp';
+import Portal from '../poi-assets/Portal';
 
 function CreatePoi({onClose,setPoiName,setPoiType}) {
-    const {setObjectId,api,authToken,splatUrls} = useContext(SelectedObjectContext)
+    const {setObjectId,objectId,splatUrls,mapId,createNewPoiData,mapData,fetchPoiData,poiData} = useContext(SelectedObjectContext)
     const [poiTypeLocal, setPoiTypeLocal] = useState(null)
+    const [newPoiData, setNewPoiData] = useState(null)
 
-
-    const {gameObjects,setGameObjects} = useGameObjects(0)
+    const {gameObjects,setGameObjects} = useGameObjects()
     // get ref to global array that stores all game object properties
     const {properties, setProperties} = useProperties()
+
     // add new properties of game objects to the array
     const handleAddProperties = () => {
       const newProperties = createNewProperties(poiTypeLocal,properties)
       setProperties((prevInstances) => [...prevInstances, newProperties]);
   };
+  
+  useEffect(()=>{
+    if(newPoiData){
+      createNewPoiData(newPoiData).then(()=>{
+        console.log("new Data",newPoiData);
+        fetchPoiData(mapId).then(()=>{
+          onClose()
+        })
+      })
+    }
+    
+  },[newPoiData])
 
     const handleAddPoi = () => {
         createGameobject()
         handleAddProperties()
-        onClose(); // Close the modal
+        // onClose()
     };
-
-    const addDataToPoi = async () => {
-        try {
-          const response = await api.post(
-            'poi/',
-            updatedPoiData,
-            {
-              headers: {
-                Authorization: `Bearer ${authToken}`,
-                'Content-Type': 'application/json', // Add this line
-              },
-            }
-          );
-          console.log("Posted poi data successfully", response.status);
-        } catch (error) {
-          console.error('Failed to post data to /poi/', error.message);
-        }
-      };
-
       
-    //   https://huggingface.co/cakewalk/splat-data/resolve/main/nike.splat
-
     let newGameObject,newProperty;
     const createGameobject = () =>{
         if(poiTypeLocal==='9'){
+          // set object id
             setObjectId(gameObjects.length)
-            newGameObject = <Splat src={splatUrls} key={gameObjects.length} objectId={gameObjects.length}/>; // You can use a key to ensure uniqueness
-            // newProperty = <SplatProp url={splatUrls} key={gameObjects.length} objectId={gameObjects.length}/>
+            // create new react component
+            newGameObject = <Splat key={gameObjects.length} objectId={gameObjects.length+1}/>; // You can use a key to ensure uniqueness
+            // set initial properties
+            setNewPoiData({
+              mapId: mapId,
+              type: 9, 
+              location: {
+                x: 0,
+                y: 0,
+                z: 0
+              },
+              rotation: {
+                x: 0,
+                y: 0,
+                z: 0,
+                w: 0
+              },
+              scale: {
+                x: 1,
+                y: 1,
+                z: 1,
+              },
+              tags: [
+                "123",
+                "tag1",
+                "tag2"
+              ]
+            })
         }
         else if(poiTypeLocal=='2'){
             setObjectId(gameObjects.length)
             newGameObject = <Cesium
             position={[0,0,0]}
             />
-            newProperty = <CesiumProp />
-        }else if(poiTypeLocal=='3'){
+        }
+        
+        else if(poiTypeLocal=='3'){
           setObjectId(gameObjects.length)
           newGameObject = <Gltf />
-          
-          newProperty = <CesiumProp />
-      }
+          setNewPoiData({
+            mapId: mapId,
+            type: 3, 
+            location: {
+              x: 0,
+              y: 0,
+              z: 0
+            },
+            rotation: {
+              x: 0,
+              y: 0,
+              z: 0,
+              w: 0
+            },
+            scale: {
+              x: 1,
+              y: 1,
+              z: 1,
+            },
+            tags: [
+              "123",
+              "tag1",
+              "tag2"
+            ]
+          })
+        }
+      
+        else if(poiTypeLocal==='10'){
+          setObjectId(gameObjects.length)
+          newGameObject = <Portal />
+          setNewPoiData({
+            mapId: mapId,
+            type:10, 
+            location: {
+              x: 0,
+              y: 0,
+              z: 0
+            },
+            rotation: {
+              x: 0,
+              y: 0,
+              z: 0,
+              w: 0
+            },
+            scale: {
+              x: 1,
+              y: 1,
+              z: 1,
+            },
+            tags: [
+              "123",
+              "tag1",
+              "tag2"
+            ]
+          })
+        }
         
         // Update the gameObjects array with the newSplat
-        setProperties((prevProperties)=>[...prevProperties],newProperty)
+        // setProperties((prevProperties)=>[...prevProperties],newProperty)
         setGameObjects((prevGameObjects) => [...prevGameObjects, newGameObject]);
     }
 
@@ -93,7 +168,7 @@ function CreatePoi({onClose,setPoiName,setPoiType}) {
             <Form.Select size='lg' style={{ width: "100%", height: "2em", padding: "1%", margin: '1%', fontSize: 16,borderRadius:5 }} onChange={(e)=>{setPoiType(e.target.value); setPoiTypeLocal(e.target.value)}}>
                 <option>POI type</option>
                 {/* <option value="1">Point Cloud</option> */}
-                <option value="2">Cesium</option>
+                {/* <option value="2">Cesium</option> */}
                 <option value="3">glb/Gltf</option>
                 {/* <option value="4">Animated GLB</option>
                 <option value="5">Image</option>
@@ -101,8 +176,9 @@ function CreatePoi({onClose,setPoiName,setPoiType}) {
                 <option value="7">Text</option>
                 <option value="8">Audio</option> */}
                 <option value="9">Splat</option>
+                <option value="10">Portal</option>
             </Form.Select>
-            <button onClick={handleAddPoi} type='submit'>Create</button>
+            <button className='button' onClick={handleAddPoi} type='submit'>Create</button>
         </div>
         </div>
     );

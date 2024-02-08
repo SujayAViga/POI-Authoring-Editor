@@ -1,19 +1,24 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import { SelectedObjectContext } from '../three-components/SelectedObjectProvider';
 import { useGameObjects } from '../three-components/GameObjectsProvider';
 import { useProperties } from '../three-components/PropertiesProvider';
 
 const Poi = ({ poiName,poiType,objectId,locale }) => {
-  const { setSelectedObject,setObjectId } = useContext(SelectedObjectContext);
+  const { setSelectedObject,setObjectId,fetchPoiData,mapId,poiData } = useContext(SelectedObjectContext);
   const {properties} = useProperties()
-  const {gameObjects} = useGameObjects()
 
-
+  // fetch map 
+  useEffect(()=>{
+    fetchPoiData(mapId).then(()=>{
+      properties[objectId-1].poiId = poiData[objectId-1].POIId
+    })
+  },[])
 
   const handleObjectSelection = () => {
     setSelectedObject({poiType,poiName,locale});
-    setObjectId(objectId)
+    console.log(properties[objectId-1].poiId);
+    setObjectId(objectId-1)    
   };
 
   const poitype = {
@@ -25,11 +30,12 @@ const Poi = ({ poiName,poiType,objectId,locale }) => {
     "6": "Video",
     "7": "Text",
     "8": "Audio",
-    "9": "Splat"
+    "9": "Splat",
+    "10": "Portal"
   }
     return (
       <div className='property-container'>
-        <button onClick={handleObjectSelection}>{poiName}({poitype[poiType]})</button>
+        <button className='button' onClick={handleObjectSelection}>{poiName}({poitype[poiType]})</button>
       </div>
     );
   };

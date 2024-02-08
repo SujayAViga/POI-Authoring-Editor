@@ -1,145 +1,118 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import Transforms from '../Transforms'
 import { Button } from 'react-bootstrap'
 import { SelectedObjectContext } from '../../three-components/SelectedObjectProvider';
 import { useProperties } from '../../three-components/PropertiesProvider';
+import './Properties.css'
 
 function SplatProp() {
-  const { objectId,authToken,api} = useContext(SelectedObjectContext);
-  const [splatLocalUrl, setSplatLocalUrl] = useState('');
-  const {properties,setProperties} = useProperties()
-  const [assetData, setAssetData] = useState()
+  const {autoSaveData,objectId,autoSave,authToken,api,mapId,createNewPoiData,poiData,setPoiData,mapData,updatePoiData,fetchPoiData,fetchDataFromAssets,addDataToAsset,updateAssetData} = useContext(SelectedObjectContext);
+  const {properties,setProperties} = useProperties();
 
+  const [splatLocalUrl, setSplatLocalUrl] = useState('');
+  const [localLang, setLocalLang] = useState('')
+  
+  const [assetData, setAssetData] = useState()
+  const [updatedPoiData, setUpdatedPoiData] = useState(null)
 
   useEffect(()=>{
     setSplatLocalUrl(properties[objectId].url)
-    setAssetData({
-      mapId: "46djYs1XYstXTKT4JAlh",
-      POIId: "IVgWggHCA4xxMu6H6dTR",
-      language: "english",
-      URL: properties[objectId].url,
-      text: "this is an example text",
-      exitPortalPosition: {
-        x: properties[objectId].location.x,
-        y: properties[objectId].location.y,
-        z: properties[objectId].location.z
-      },
-      exitPortalRotation: {
-        x: properties[objectId].rotation.x,
-        y: properties[objectId].rotation.y,
-        z: properties[objectId].rotation.z,
-        w: 0.4
-      },
-      exitPortalScale: {
-        x: 1.5,
-        y: 1.5,
-        z: 1.5
-      },
-      exitPortalText: "string",
-      splatBoundaryCenter: {
-        x: 0,
-        y: 0,
-        z: 0
-      },
-      splatBoundaryRadius: 0,
-      splatBoundaryWidth: 0,
-      splatBoundaryHeight: 0,
-      splatBoundaryLength: 0
-    })
-  },[properties])
+  },[])
 
-  const handleSplatFetch = () =>{
+  //  update POI data to post to /poi and
+  //  asset data to post to /asset
+  useEffect(()=>{
+    
+    setUpdatedPoiData(
+      {
+        mapId: mapId,
+        POIId: properties[objectId].poiId,
+        type: "9",
+        location: {
+          x: properties[objectId].location.x,
+          y: properties[objectId].location.y,
+          z: properties[objectId].location.z
+        },
+        rotation: {
+          x: properties[objectId].rotation.x,
+          y: properties[objectId].rotation.y,
+          z: properties[objectId].rotation.z,
+          w: properties[objectId].rotation.w
+        },
+        scale: {
+          x: properties[objectId].scale.x,
+          y: properties[objectId].scale.y,
+          z: properties[objectId].scale.z,
+        },
+      }
+    )
+    
+    
+    if(properties[objectId].url){
+      setAssetData({
+        mapId: mapId,
+        POIId: properties[objectId].poiId,
+        language: properties[objectId].locale,
+        URL: splatLocalUrl,
+      })
+    }else{
+      setAssetData({
+        mapId: mapId,
+        POIId: properties[objectId].poiId,
+        language: properties[objectId].locale,
+      })
+    }
+    console.log(properties[objectId].assetCreated);
+  },[properties,splatLocalUrl])
 
-  }
-  
-  const handleSplatUpdate = () =>{
+
+  useEffect(()=>{
+    console.log(objectId);
+    // create asset if not else update the existing asset
+    if(assetData && properties[objectId].poiId && !properties[objectId].assetCreated){
+      if(authToken){
+        console.log(assetData);
+        addDataToAsset(assetData)
+      }
+      
+    }else if(assetData && properties[objectId].poiId && !properties[objectId].assetCreated){
+      if(updatedPoiData){
+        updatePoiData(updatedPoiData).then(()=>{
+          updateAssetData(assetData).then(()=>{
+            fetchPoiData(mapId).then(()=>{
+              fetchDataFromAssets(mapId,properties[objectId].poiId)
+            })
+          })
+        })
+      }
+    }
+    
+  },[autoSave])
+
+  const handleUpdate = () =>{
     // store previous values of "properties" array
     const updatedProperties = [...properties];
     // update url 
     updatedProperties[objectId].url = splatLocalUrl;
     // set the updated properties as properties
     setProperties(updatedProperties);
-    
-    console.log(assetData.URL);
-    if(authToken){
-      updateAssetData().then(()=>{
-        fetchDataFromAssets()
-      })
-    }
+    autoSaveData()
   }
+
+
   const handleUrlChange = (e) => {
     setSplatLocalUrl(e.target.value)
   };
 
-  const fetchDataFromAssets = async () =>{
-    try {
-      const response = await api.post(
-        'asset/get/',
-        {
-          mapId: "46djYs1XYstXTKT4JAlh",
-          POIId: "IVgWggHCA4xxMu6H6dTR"
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        }
-      );
-      // console.log("Assets fetched",response.data);
-      setAssetData(response.data)
-    } catch (error) {
-      console.error('Failed to fetch from /assets/get', error.message);
-    }
-  };
-  
-  
-
-  const addDataToAsset = async () => {
-    try {
-      const response = await api.post(
-        'asset/',
-        assetData,
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        }
-      );
-      console.log("Asset created!! ", response.status);
-    } catch (error) {
-      console.error('Failed to post data to /asset/', error.message);
-    }
-  };
-
-  const updateAssetData =  async () => {
-    try {
-      const response = await api.patch(
-        `asset/`, // Update the url with the specific POI ID
-        assetData,
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-      console.log("Updated asset data successfully", response.status);
-    } catch (error) {
-      console.error('Failed to update data to /asset/', error.message);
-    }
-  };
   
   return (
     <>
       <Transforms transforms = {properties[objectId]}/>
       <div className='property-container'>
         <h4>Splat Property</h4>
-        <input placeholder="Locale"/>
+        <input placeholder="Locale" value={localLang} onChange={(e)=>setLocalLang(e.target.value)}/>
         <input placeholder='Splat url' value={splatLocalUrl} onChange={handleUrlChange}/>
-        <input placeholder='Exit portal'/>
-        <input placeholder='Entry portal'/>
-        {/* <Button onClick={handleSplatFetch}>Fetch</Button> */}
-        <Button onClick={handleSplatUpdate}>Update</Button>
+        <button className="button" onClick={handleUpdate}>Update</button>
       </div>
     </>
   )
