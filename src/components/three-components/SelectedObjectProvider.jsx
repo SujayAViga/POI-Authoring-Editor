@@ -154,7 +154,10 @@ const addDataToAsset = async (assetData) => {
         },
       }
     );
-    console.log("Asset created!! ", response.data);
+    console.log("Asset created!! ", response.status);
+    if(response.status===200){
+      properties[objectId].assetCreated = true
+    }
   } catch (error) {
     console.error('Failed to post data to /asset/', error.message);
   }

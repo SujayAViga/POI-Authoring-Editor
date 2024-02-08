@@ -71,9 +71,8 @@ function SplatProp() {
     // create asset if not else update the existing asset
     if(assetData && !properties[objectId].assetCreated){
       if(authToken){
-        addDataToAsset(assetData).then(()=>{
-          properties[objectId].assetCreated = true
-        })
+        console.log(assetData);
+        addDataToAsset(assetData)
       }
       
     }else if(assetData && properties[objectId].assetCreated){
