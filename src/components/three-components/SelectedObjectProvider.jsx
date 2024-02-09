@@ -94,8 +94,16 @@ const SelectedObjectProvider = ({ children }) => {
           },
         }
       );
-      console.log("poi fetched",response.data);
-      setPoiData(response.data.message)
+      // console.log("poi fetched",response.data);
+      // setPoiData(response.data.message)
+      
+      // Sort the data based on the 'createdOn' timestamp in ascending order
+        const sortedPoiData = response.data.message.sort((a, b) =>
+        new Date(a.createdOn) - new Date(b.createdOn)
+      );
+
+      console.log("poi fetched", sortedPoiData);
+      setPoiData(sortedPoiData);
     } catch (error) {
       console.error('Failed to fetch from /poi/get', error.message);
     }
