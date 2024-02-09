@@ -46,21 +46,12 @@ function StaticGlbProp() {
       }
     )
     
+      setAssetData({
+        mapId: mapId,
+        POIId: properties[objectId].poiId,
+        language: properties[objectId].locale,
+      })
     
-    if(properties[objectId].url){
-      setAssetData({
-        mapId: mapId,
-        POIId: properties[objectId].poiId,
-        language: properties[objectId].locale,
-        URL: localUrl,
-      })
-    }else{
-      setAssetData({
-        mapId: mapId,
-        POIId: properties[objectId].poiId,
-        language: properties[objectId].locale,
-      })
-    }
     console.log(properties[objectId].assetCreated);
   },[properties,localUrl])
   
