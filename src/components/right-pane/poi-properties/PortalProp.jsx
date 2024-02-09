@@ -71,7 +71,7 @@ function PortalProp() {
         addDataToAsset(assetData)
       }
       
-    }else if(assetData && properties[objectId].poiId && !properties[objectId].assetCreated){
+    }else if(assetData && properties[objectId].poiId && properties[objectId].assetCreated){
       if(updatedPoiData){
         updatePoiData(updatedPoiData).then(()=>{
           updateAssetData(assetData).then(()=>{

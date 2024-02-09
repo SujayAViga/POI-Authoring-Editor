@@ -67,15 +67,16 @@ function SplatProp() {
 
 
   useEffect(()=>{
-    console.log(objectId);
+    console.log(properties[objectId].assetCreated);
     // create asset if not else update the existing asset
-    if(assetData && properties[objectId].poiId && !properties[objectId].assetCreated){
+    if(assetData && !properties[objectId].assetCreated){
       if(authToken){
         console.log(assetData);
         addDataToAsset(assetData)
       }
       
-    }else if(assetData && properties[objectId].poiId && !properties[objectId].assetCreated){
+    }else if(assetData && properties[objectId].poiId && properties[objectId].assetCreated){
+      console.log("update");
       if(updatedPoiData){
         updatePoiData(updatedPoiData).then(()=>{
           updateAssetData(assetData).then(()=>{
