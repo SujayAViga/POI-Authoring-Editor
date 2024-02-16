@@ -198,6 +198,7 @@ function CreatePoi({onClose,setPoiName,setPoiType}) {
             <h2 style={{color:'black'}}>Create POI</h2>
             <input placeholder='Poi Name' onChange={(e)=>{setPoiName(e.target.value)}}/>
             <Form.Select size='lg' style={{ width: "100%", height: "2em", padding: "1%", margin: '1%', fontSize: 16,borderRadius:5 }} onChange={(e)=>{setPoiType(e.target.value); setPoiTypeLocal(e.target.value)}}>
+                <option>Select POI type</option>
                 <option value="3">Glb/Gltf</option>
                 <option value="7">Info Panel</option>
                 <option value="9">Splat</option>
