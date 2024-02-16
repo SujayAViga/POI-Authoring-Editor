@@ -17,6 +17,8 @@ import CesiumProp from '../right-pane/poi-properties/CesiumProp';
 import { CuboidCollider, RigidBody,Physics } from "@react-three/rapier";
 import StaticGlbProp from '../right-pane/poi-properties/StaticGlbProp';
 import Portal from '../poi-assets/Portal';
+import Label3d from '../three-components/Label3d';
+import InfoPanel from '../three-components/InfoPanel';
 
 function CreatePoi({onClose,setPoiName,setPoiType}) {
     const {setObjectId,objectId,splatUrls,mapId,createNewPoiData,mapData,fetchPoiData,poiData} = useContext(SelectedObjectContext)
@@ -152,6 +154,36 @@ function CreatePoi({onClose,setPoiName,setPoiType}) {
           })
         }
         
+        else if(poiTypeLocal==='7'){
+          setObjectId(gameObjects.length)
+          newGameObject = <InfoPanel />
+          setNewPoiData({
+            mapId: mapId,
+            type:7, 
+            location: {
+              x: 0,
+              y: 0,
+              z: 0
+            },
+            rotation: {
+              x: 0,
+              y: 0,
+              z: 0,
+              w: 0
+            },
+            scale: {
+              x: 1,
+              y: 1,
+              z: 1,
+            },
+            tags: [
+              "123",
+              "tag1",
+              "tag2"
+            ]
+          })
+        }
+        
         // Update the gameObjects array with the newSplat
         // setProperties((prevProperties)=>[...prevProperties],newProperty)
         setGameObjects((prevGameObjects) => [...prevGameObjects, newGameObject]);
@@ -166,17 +198,16 @@ function CreatePoi({onClose,setPoiName,setPoiType}) {
             <h2 style={{color:'black'}}>Create POI</h2>
             <input placeholder='Poi Name' onChange={(e)=>{setPoiName(e.target.value)}}/>
             <Form.Select size='lg' style={{ width: "100%", height: "2em", padding: "1%", margin: '1%', fontSize: 16,borderRadius:5 }} onChange={(e)=>{setPoiType(e.target.value); setPoiTypeLocal(e.target.value)}}>
-                <option>POI type</option>
+                <option value="3">Glb/Gltf</option>
+                <option value="7">Info Panel</option>
+                <option value="9">Splat</option>
+                <option value="10">Portal</option>
                 {/* <option value="1">Point Cloud</option> */}
                 {/* <option value="2">Cesium</option> */}
-                <option value="3">glb/Gltf</option>
                 {/* <option value="4">Animated GLB</option>
                 <option value="5">Image</option>
                 <option value="6">Video</option>
-                <option value="7">Text</option>
                 <option value="8">Audio</option> */}
-                <option value="9">Splat</option>
-                <option value="10">Portal</option>
             </Form.Select>
             <button className='button' onClick={handleAddPoi} type='submit'>Create</button>
         </div>

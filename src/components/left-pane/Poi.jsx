@@ -31,7 +31,8 @@ const Poi = ({ poiName,poiType,objectId,locale }) => {
     "7": "Text",
     "8": "Audio",
     "9": "Splat",
-    "10": "Portal"
+    "10": "Portal",
+    "11": "Info Panel"
   }
     return (
       <div className='property-container'>

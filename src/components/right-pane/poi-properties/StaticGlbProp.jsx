@@ -49,6 +49,7 @@ function StaticGlbProp() {
       setAssetData({
         mapId: mapId,
         POIId: properties[objectId].poiId,
+        URL: localUrl,
         language: properties[objectId].locale,
       })
     

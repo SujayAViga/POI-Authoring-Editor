@@ -5,6 +5,11 @@ import { SelectedObjectContext } from '../../three-components/SelectedObjectProv
 import { useProperties } from '../../three-components/PropertiesProvider';
 import './Properties.css'
 
+
+{/* https://huggingface.co/datasets/sujayA7299/Splat-data/resolve/main/empty.splat */}
+{/* https://huggingface.co/datasets/sujayA7299/Splat-data/resolve/main/panelroom.splat */}
+{/* https://huggingface.co/cakewalk/splat-data/resolve/main/train.splat */}
+
 function SplatProp() {
   const {autoSaveData,objectId,autoSave,authToken,api,mapId,createNewPoiData,poiData,setPoiData,mapData,updatePoiData,fetchPoiData,fetchDataFromAssets,addDataToAsset,updateAssetData} = useContext(SelectedObjectContext);
   const {properties,setProperties} = useProperties();

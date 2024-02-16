@@ -82,10 +82,9 @@ export const createNewProperties = (poiTypeLocal, properties) => {
         
         additionalProperties = {
           type:"text",
-          text:'',
-          fontType:'arial',
-          fontSize:20
-        };
+          title:'',
+          about:''
+        }
     }
     else if (poiTypeLocal === "8") {
       

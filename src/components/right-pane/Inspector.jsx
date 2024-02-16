@@ -12,6 +12,7 @@ import ImageProp from './poi-properties/ImageProp'
 import { SelectedObjectContext } from '../three-components/SelectedObjectProvider'
 import axios from 'axios'
 import PortalProp from './poi-properties/PortalProp'
+import InfoPanelProp from './poi-properties/InfoPanelProp'
 
 
 
@@ -112,8 +113,9 @@ function Inspector () {
       return (        
       <div className='inpector-container'>
         <div className='property-container'>{selectedObject.poiName}</div>
-        <TextProp key={Name} objectId={Name} />
+        <InfoPanelProp key={Name} objectId={Name} />
       </div>)
+      
 
     case '8':
       return (        

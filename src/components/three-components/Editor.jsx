@@ -12,6 +12,8 @@ import { Physics, RigidBody } from '@react-three/rapier';
 import { radToDeg } from 'three/src/math/MathUtils';
 import Portal from '../poi-assets/Portal';
 import { Quaternion, Vector3 } from 'three';
+import Label3d from './Label3d';
+import InfoPanel from './InfoPanel';
 
 function Editor() {    
 
@@ -78,6 +80,10 @@ function Editor() {
           if(assetType==="splat"){
               prop.src = combinedProps.url;
           }
+          else if(assetType==="text"){
+            prop.titleText = combinedProps.title
+            prop.aboutText =  combinedProps.about
+          }
           else if(assetType==="cesium"){
             prop.ionAssetId = combinedProps.assetID
             prop.ionAccessToken = combinedProps.accessToken
@@ -123,14 +129,29 @@ function Editor() {
             
             <GizmoHelper alignment="top-right" margin={[80, 80]} >
                 <GizmoViewport axisColors={['#eb4d4b', '#6ab04c', '#2e86de']} labelColor="black" />
-                {/* <GizmoViewcube/> */}
             </GizmoHelper>
 
             <Physics debug>
               {combinedComponents}
+              {/* <PivotControls
+                  
+                  depthTest={false}
+                  disableRotations={0}
+                  disableSliders={0}
+                  disableAxes={0}
+                  // onDrag={(e)=>{handleDrag(e)}}
+                  // onDragEnd={autoSaveData}
+                  // autoTransform
+                  scale={100}
+                  fixed
+                  lineWidth={4}
+                  >
+                <InfoPanel/>
+            </PivotControls> */}
+              
             </Physics>
-              {/* <Splat src='https://huggingface.co/datasets/sujayA7299/Splat-data/resolve/main/empty.splat'/> */}
-              {/* https://huggingface.co/cakewalk/splat-data/resolve/main/train.splat */}
+          
+
         </Canvas>
     </>
   )
