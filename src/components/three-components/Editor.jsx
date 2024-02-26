@@ -8,12 +8,13 @@ import { useGameObjects } from './GameObjectsProvider';
 import { SelectedObjectContext } from './SelectedObjectProvider';
 import { useProperties } from './PropertiesProvider';
 import Cesium from '../poi-assets/Cesium';
-import { Physics, RigidBody } from '@react-three/rapier';
+import { CuboidCollider, Physics, RigidBody } from '@react-three/rapier';
 import { radToDeg } from 'three/src/math/MathUtils';
 import Portal from '../poi-assets/Portal';
 import { Quaternion, Vector3 } from 'three';
 import Label3d from './Label3d';
 import InfoPanel from './InfoPanel';
+import BoxCollider from '../poi-assets/BoxCollider';
 
 function Editor() {    
 
@@ -99,6 +100,10 @@ function Editor() {
             prop.position = [0,0,0]
             prop.rotation = [0,0,0]
             prop.args = [1,1,1]
+          }else if(assetType==="image"){ //actually collider
+            prop.position = [0,0,0]
+            prop.rotation = [0,0,0]
+            prop.scale = [0,0,0]
           }
           // Create a new component with merged props
           const combinedComponent = React.cloneElement(gameObject, prop);
@@ -132,23 +137,7 @@ function Editor() {
             </GizmoHelper>
 
             <Physics debug>
-              {combinedComponents}
-              {/* <PivotControls
-                  
-                  depthTest={false}
-                  disableRotations={0}
-                  disableSliders={0}
-                  disableAxes={0}
-                  // onDrag={(e)=>{handleDrag(e)}}
-                  // onDragEnd={autoSaveData}
-                  // autoTransform
-                  scale={100}
-                  fixed
-                  lineWidth={4}
-                  >
-                <InfoPanel/>
-            </PivotControls> */}
-              
+              {combinedComponents}            
             </Physics>
           
 

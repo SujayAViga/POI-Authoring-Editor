@@ -11,7 +11,7 @@ const SelectedObjectProvider = ({ children }) => {
   const [objectId, setObjectId] = useState(0)
   const [locale, setLocale] = useState()
   const [authToken, setAuthToken] = useState()
-  const [mapId, setMapId] = useState('Ha7ZvmsazerrizPETEJL')
+  const [mapId, setMapId] = useState('zN2mlHwG3HVhFZ58tp9K')
   const [poiData,setPoiData ] = useState([])
   const [previousPoiIDs, setPreviousPoiIDs] = useState([])
   const firstRender = useRef(true);
@@ -19,6 +19,7 @@ const SelectedObjectProvider = ({ children }) => {
   const [mapData, setMapData] = useState()
 
   const [autoSave, setAutoSave] = useState(0)
+  const [colliderList, setColliderList] = useState([])
 
   const autoSaveData = () =>{
     setAutoSave(autoSave+1)
@@ -229,6 +230,7 @@ const fetchDataFromAssets = async (mapId, poiId) =>{
     locale,setLocale,
     objectId,setObjectId,
     selectedObject,setSelectedObject,
+    colliderList, setColliderList,
     mapData,setMapData,
     firstRender,
     previousPoiIDs, setPreviousPoiIDs,autoSave, setAutoSave,

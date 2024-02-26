@@ -1,39 +1,28 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
-import Transforms from '../Transforms'
-import { Button } from 'react-bootstrap'
+import React, { useContext, useEffect, useState } from 'react'
+import ColliderElement from './ColliderElement';
+import { useGameObjects } from '../../three-components/GameObjectsProvider';
 import { SelectedObjectContext } from '../../three-components/SelectedObjectProvider';
+import BoxCollider from '../../poi-assets/BoxCollider';
+import { createNewProperties } from '../../left-pane/propertiesUtils';
 import { useProperties } from '../../three-components/PropertiesProvider';
+import { Splat } from '@react-three/drei';
 import './Properties.css'
-import Colliders from './ColliderProp';
+import Transforms from '../Transforms';
 
-
-{/* https://huggingface.co/datasets/sujayA7299/Splat-data/resolve/main/empty.splat */}
-{/* https://huggingface.co/datasets/sujayA7299/Splat-data/resolve/main/panelroom.splat */}
-{/* https://huggingface.co/cakewalk/splat-data/resolve/main/nike.splat */}
-
-function SplatProp() {
+function ColliderProp() {
   const {autoSaveData,objectId,autoSave,authToken,api,mapId,createNewPoiData,poiData,setPoiData,mapData,updatePoiData,fetchPoiData,fetchDataFromAssets,addDataToAsset,updateAssetData} = useContext(SelectedObjectContext);
   const {properties,setProperties} = useProperties();
-
-  const [splatLocalUrl, setSplatLocalUrl] = useState('');
-  const [localLang, setLocalLang] = useState('')
-  
-  const [assetData, setAssetData] = useState()
   const [updatedPoiData, setUpdatedPoiData] = useState(null)
+  const [assetData, setAssetData] = useState()
 
-  useEffect(()=>{
-    setSplatLocalUrl(properties[objectId].url)
-  },[])
-
-  //  update POI data to post to /poi and
-  //  asset data to post to /asset
+  
   useEffect(()=>{
     
     setUpdatedPoiData(
       {
         mapId: mapId,
         POIId: properties[objectId].poiId,
-        type: "9",
+        type: "5",
         location: {
           x: properties[objectId].location.x,
           y: properties[objectId].location.y,
@@ -52,22 +41,19 @@ function SplatProp() {
         },
       }
     )
-    
-    
 
-      setAssetData({
-        mapId: mapId,
-        POIId: properties[objectId].poiId,
-        language: properties[objectId].locale,
-        URL: splatLocalUrl,
-      })
+    setAssetData({
+      mapId: mapId,
+      POIId: properties[objectId].poiId,
+    })
     
     console.log(properties[objectId].assetCreated);
-  },[properties,splatLocalUrl])
+  },[properties])
 
-
+  
   useEffect(()=>{
     console.log(properties[objectId].assetCreated);
+    console.log(assetData);
     // create asset if not else update the existing asset
     if(assetData && !properties[objectId].assetCreated){
       if(authToken){
@@ -90,35 +76,12 @@ function SplatProp() {
     
   },[autoSave])
 
-  const handleUpdate = () =>{
-    // store previous values of "properties" array
-    const updatedProperties = [...properties];
-    // update url 
-    updatedProperties[objectId].url = splatLocalUrl;
-    // set the updated properties as properties
-    setProperties(updatedProperties);
-    autoSaveData()
-  }
 
-
-  const handleUrlChange = (e) => {
-    setSplatLocalUrl(e.target.value)
-  };
-
-  
   return (
     <>
       <Transforms transforms = {properties[objectId]}/>
-      <div className='property-container'>
-        <h4>Splat Property</h4>
-        <input placeholder="Locale" value={localLang} onChange={(e)=>setLocalLang(e.target.value)}/>
-        <input placeholder='Splat url' value={splatLocalUrl} onChange={handleUrlChange}/>
-        <button className="button" onClick={handleUpdate}>Update</button>
-      </div>
     </>
   )
 }
 
-export default SplatProp
-
-
+export default ColliderProp

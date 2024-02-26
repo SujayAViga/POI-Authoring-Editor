@@ -13,6 +13,7 @@ import { SelectedObjectContext } from '../three-components/SelectedObjectProvide
 import axios from 'axios'
 import PortalProp from './poi-properties/PortalProp'
 import InfoPanelProp from './poi-properties/InfoPanelProp'
+import ColliderProp from './poi-properties/ColliderProp'
 
 
 
@@ -99,7 +100,7 @@ function Inspector () {
       return (        
       <div className='inpector-container'>
         <div className='property-container'>{selectedObject.poiName}</div>
-        <ImageProp key={Name} objectId={Name} />
+        <ColliderProp key={Name} objectId={Name} />
       </div>)
 
     case '6':
