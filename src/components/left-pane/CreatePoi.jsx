@@ -60,7 +60,7 @@ function CreatePoi({onClose,setPoiName,setPoiType}) {
           // set object id
             setObjectId(gameObjects.length)
             // create new react component
-            newGameObject = <Splat key={gameObjects.length} objectId={gameObjects.length+1}/>; // You can use a key to ensure uniqueness
+            newGameObject = <Splat key={gameObjects.length} objectId={gameObjects.length}/>; // You can use a key to ensure uniqueness
             // set initial properties
             setNewPoiData({
               mapId: mapId,

@@ -28,7 +28,6 @@ function SplatProp() {
   //  update POI data to post to /poi and
   //  asset data to post to /asset
   useEffect(()=>{
-    
     setUpdatedPoiData(
       {
         mapId: mapId,

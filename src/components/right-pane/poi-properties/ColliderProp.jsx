@@ -17,7 +17,7 @@ function ColliderProp() {
 
   
   useEffect(()=>{
-    
+    console.log(objectId);
     setUpdatedPoiData(
       {
         mapId: mapId,
