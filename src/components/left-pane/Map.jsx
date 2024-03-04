@@ -18,7 +18,7 @@ const Map = ({ mapName }) => {
     useEffect(()=>{
       if(mapData){
         console.log('new mapData',mapData);
-        setPreviousPoiIDs(mapData.data[1].POI)
+        setPreviousPoiIDs(mapData[3].POI)
       }
     },[])
 
