@@ -15,12 +15,21 @@ import { Quaternion, Vector3 } from 'three';
 import Label3d from './Label3d';
 import InfoPanel from './InfoPanel';
 import BoxCollider from '../poi-assets/BoxCollider';
+import * as THREE from 'three'; 
+
 
 function Editor() {    
 
     const { gameObjects, setGameObjects } = useGameObjects();
     const {properties,setProperties,testString,setTestString} = useProperties()
     const {objectId, setAutoSave,autoSaveData} = useContext(SelectedObjectContext)
+
+    const position_ = new THREE.Vector3(0, 1, 0);
+    const rotation_ = new THREE.Euler(0, 0, 0, 'XYZ'); // Euler angles for rotation
+    const scale_ = new THREE.Vector3(1, 1, 1);
+
+    const matrix = new THREE.Matrix4();
+    matrix.compose(position_, rotation_, scale_);
     
     const [isAltPressed, setIsAltPressed] = useState(false);
     const handleKeyDown = (event) => {
@@ -37,6 +46,7 @@ function Editor() {
       };
 
       const handleDrag = (e) =>{        
+        // console.log(e);
           const updatedProperties = [...properties];
 
           const loc = new Vector3().setFromMatrixPosition(e)
@@ -109,13 +119,15 @@ function Editor() {
           const combinedComponent = React.cloneElement(gameObject, prop);
             return (
               <PivotControls
+                  // matrix={matrix}
+                  // position = {[0,0,0]}
                   depthTest={false}
                   disableRotations={objectId!==index}
                   disableSliders={objectId!==index}
                   disableAxes={objectId!==index}
                   onDrag={(e)=>{handleDrag(e)}}
                   onDragEnd={autoSaveData}
-                  // autoTransform
+                  // autoTransform = {false}
                   scale={100}
                   fixed
                   lineWidth={4}
@@ -139,7 +151,13 @@ function Editor() {
             <Physics debug>
               {combinedComponents}            
             </Physics>
-          
+          {/* <TransformControls 
+            onPointerUp={(e)=>console.log(e.camera.matrix.elements)}>
+            <mesh position={[0,0,0]}>
+              <boxGeometry args={[1,1,1]} />
+              <meshMatcapMaterial color={"white"}/>
+            </mesh>
+          </TransformControls> */}
 
         </Canvas>
     </>

@@ -11,7 +11,7 @@ const SelectedObjectProvider = ({ children }) => {
   const [objectId, setObjectId] = useState(0)
   const [locale, setLocale] = useState()
   const [authToken, setAuthToken] = useState()
-  const [mapId, setMapId] = useState('zN2mlHwG3HVhFZ58tp9K')
+  const [mapId, setMapId] = useState('yeTvXpZYgMIfyirMQxSr') // setpreviouspoiId in mapjsx
   const [poiData,setPoiData ] = useState([])
   const [previousPoiIDs, setPreviousPoiIDs] = useState([])
   const firstRender = useRef(true);
