@@ -11,7 +11,7 @@ const SelectedObjectProvider = ({ children }) => {
   const [objectId, setObjectId] = useState(0)
   const [locale, setLocale] = useState()
   const [authToken, setAuthToken] = useState()
-  const [mapId, setMapId] = useState('yeTvXpZYgMIfyirMQxSr') // setpreviouspoiId in mapjsx
+  const [mapId, setMapId] = useState('') // setpreviouspoiId in mapjsx
   const [poiData,setPoiData ] = useState([])
   const [previousPoiIDs, setPreviousPoiIDs] = useState([])
   const firstRender = useRef(true);
@@ -35,8 +35,13 @@ const SelectedObjectProvider = ({ children }) => {
         },
       });
       // Handle the response here
-      console.log('Global Data from /map/:', response.data);
-      setMapData(response.data);
+      const sortedMapData = response.data.data.sort((a, b) =>
+      new Date(a.createdOn) - new Date(b.createdOn)
+    );
+
+    // console.log("poi fetched", sortedPoiData);
+      console.log('Global Data from /map/:', sortedMapData);
+      setMapData(sortedMapData);
       
     } catch (error) {
       // Handle errors here
