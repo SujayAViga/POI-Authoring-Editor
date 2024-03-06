@@ -88,7 +88,7 @@ function AddCollider({handleAddCollider}) {
     }
     
   return (
-    <button onClick={handleAddPoi}>+</button>
+    <button className='button' onClick={handleAddPoi}>+</button>
   )
 }
 

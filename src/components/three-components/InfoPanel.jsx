@@ -16,7 +16,7 @@ function InfoPanel({titleText,aboutText}) {
 
     return (
         <>
-            <Html zIndexRange={[0,-1]} position={[0,0,0]} style={{ transition: 'opacity 2s', opacity: isVisible ? 1 : 0.2, transform: `scale(${isVisible ? 5 : 3})` }} transform>
+            <Html zIndexRange={[0,-1]} position={[0,0,0]} style={{ transition: 'opacity 2s', opacity: isVisible ? 1 : 0.2, transform: `scale(${isVisible ? 2 : 3})` }} >
             <FaMapMarkerAlt onClick={handlePanel} style={{ color: 'indianred' }} /> 
                 {showPanel?
                     <>

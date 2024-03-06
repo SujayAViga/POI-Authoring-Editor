@@ -53,7 +53,7 @@ function Hierarchy() {
             setMapName={setMapName}/>}
         {maps}
       </div>
-      <button className='publish-button' onClick={handlePublish}>Publish</button>
+      {/* <button className='publish-button' onClick={handlePublish}>Publish</button> */}
     </div>
   )
 }

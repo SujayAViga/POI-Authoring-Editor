@@ -8,7 +8,7 @@ import Colliders from './ColliderProp';
 
 
 {/* https://huggingface.co/datasets/sujayA7299/Splat-data/resolve/main/empty.splat */}
-{/* https://huggingface.co/datasets/sujayA7299/Splat-data/resolve/main/panelroom.splat */}
+{/* https://huggingface.co/datasets/sujayA7299/Splat-data/resolve/main/electricRoom.splat */}
 {/* https://huggingface.co/cakewalk/splat-data/resolve/main/nike.splat */}
 
 function SplatProp() {
